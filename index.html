@@ -21,118 +21,120 @@
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        body { background-color: var(--bg-primary); color: var(--text-main); padding: 20px; }
+        body { background-color: var(--bg-primary); color: var(--text-main); padding: 15px; }
         .container { max-width: 1200px; margin: 0 auto; }
         
-        header { margin-bottom: 25px; text-align: center; }
-        header h1 { color: var(--accent-hover); font-size: 2rem; margin-bottom: 5px; }
-        header p { color: var(--text-muted); }
+        header { margin-bottom: 20px; text-align: center; }
+        header h1 { color: var(--accent-hover); font-size: 1.8rem; margin-bottom: 5px; }
+        header p { color: var(--text-muted); font-size: 0.9rem; }
 
-        .tabs { display: flex; justify-content: center; gap: 10px; margin-bottom: 25px; flex-wrap: wrap; }
+        .tabs { display: flex; justify-content: center; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
         .tab-btn { 
-            background: var(--card-bg); border: 1px solid var(--border-color); padding: 12px 24px;
+            background: var(--card-bg); border: 1px solid var(--border-color); padding: 10px 18px;
             font-weight: 600; cursor: pointer; border-radius: 8px; color: var(--text-muted);
-            transition: all 0.3s ease; display: flex; align-items: center; gap: 8px;
+            transition: all 0.3s ease; display: flex; align-items: center; gap: 6px; font-size: 0.9rem;
         }
         .tab-btn:hover { color: var(--accent); background: #edf2f7; }
         .tab-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
 
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.4s ease; }
+        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
 
-        .grid-dashboard { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 25px; }
-        @media (max-width: 992px) { .grid-dashboard { grid-template-columns: 1fr; } }
+        .grid-dashboard { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        @media (min-width: 992px) { .grid-dashboard { grid-template-columns: 1.2fr 0.8fr; } }
         
-        .card { background: var(--card-bg); border-radius: 12px; padding: 20px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid var(--border-color); margin-bottom: 25px; }
-        .card h2 { font-size: 1.25rem; color: var(--accent-hover); margin-bottom: 15px; border-bottom: 2px solid var(--bg-primary); padding-bottom: 8px; }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 15px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border: 1px solid var(--border-color); margin-bottom: 20px; }
+        .card h2 { font-size: 1.15rem; color: var(--accent-hover); margin-bottom: 12px; border-bottom: 2px solid var(--bg-primary); padding-bottom: 6px; }
 
-        .table-responsive { overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.95rem; }
-        th { background-color: #f7fafc; color: var(--text-main); font-weight: 600; padding: 12px; border-bottom: 2px solid var(--border-color); }
-        td { padding: 12px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
+        .table-responsive { overflow-x: auto; width: 100%; -webkit-overflow-scrolling: touch; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.85rem; }
+        th { background-color: #f7fafc; color: var(--text-main); font-weight: 600; padding: 10px; border-bottom: 2px solid var(--border-color); white-space: nowrap; }
+        td { padding: 10px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
         
         input[type="number"], input[type="text"] { 
-            width: 100%; 
-            padding: 8px; 
-            border: 1px solid var(--border-color); 
-            border-radius: 6px; 
-            color: var(--text-main);
-            font-size: 0.95rem;
-            background-color: #f8fafc;
+            width: 100%; min-width: 70px; padding: 6px; 
+            border: 1px solid var(--border-color); border-radius: 6px; 
+            color: var(--text-main); font-size: 0.85rem; background-color: #f8fafc;
         }
         input[type="number"]:focus, input[type="text"]:focus {
-            background-color: #ffffff;
-            border-color: var(--accent);
-            outline: none;
+            background-color: #ffffff; border-color: var(--accent); outline: none;
         }
         
-        .badge { padding: 4px 8px; border-radius: 6px; font-weight: bold; font-size: 0.85rem; display: inline-block; }
-        .badge-success { background-color: #c6f6d5; color: #22543d; }
-        .badge-danger { background-color: #fed7d7; color: #742a2a; }
+        .badge { padding: 4px 6px; border-radius: 6px; font-weight: bold; font-size: 0.8rem; display: inline-block; }
+        .badge-pilar { background-color: #edf2f7; color: var(--text-main); }
 
-        .chart-container { position: relative; margin: auto; height: 320px; width: 100%; display: flex; justify-content: center; }
-        .btn-add { background: var(--success); color: white; border: none; padding: 10px 16px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.9rem; margin-top: 15px; display: inline-flex; align-items: center; gap: 8px; }
-        .btn-delete { background: var(--danger); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; }
+        .chart-container { position: relative; margin: auto; height: 280px; width: 100%; display: flex; justify-content: center; }
+        .btn-add { background: var(--success); color: white; border: none; padding: 8px 14px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.85rem; margin-top: 12px; display: inline-flex; align-items: center; gap: 6px; }
+        .btn-delete { background: var(--danger); color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .text-success-val { color: var(--success); font-weight: 600; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1><i class="fa-solid fa-wallet"></i> Control de Inversiones</h1>
-        <p>Estrategia Patrimonial Avanzada de 5 Pilares</p>
+        <h1><i class="fa-solid fa-wallet"></i> Mi Ruta Estratégica</h1>
+        <p>Control Patrimonial Automatizado de 5 Pilares</p>
     </header>
 
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('dashboard')"><i class="fa-solid fa-chart-pie"></i> Dashboard Geral</button>
         <button class="tab-btn" onclick="switchTab('gbm')"><i class="fa-solid fa-chart-line"></i> Mercado (GBM)</button>
-        <button class="tab-btn" onclick="switchTab('dividendos')"><i class="fa-solid fa-money-bill-trend-up"></i> Historial de Dividendos</button>
+        <button class="tab-btn" onclick="switchTab('dividendos')"><i class="fa-solid fa-money-bill-trend-up"></i> Dividendos</button>
     </div>
 
+    <!-- PESTAÑA: DASHBOARD -->
     <div id="dashboard" class="tab-content active">
         <div class="grid-dashboard">
             <div>
+                <!-- Resumen por Pilares -->
                 <div class="card">
-                    <h2>Distribución Consolidada por Pilar</h2>
+                    <h2>Distribución Real por Pilar (Actualización Semanal)</h2>
                     <div class="table-responsive">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Pilar</th>
-                                    <th>Monto Total (MXN)</th>
-                                    <th>Porcentaje del Total</th>
+                                    <th>Pilar de Inversión</th>
+                                    <th>Monto ($ MXN)</th>
+                                    <th>% del Patrimonio</th>
                                 </tr>
                             </thead>
-                            <tbody id="dashboard-rows"></tbody>
+                            <tbody id="dashboard-rows">
+                                <!-- JS recalculará todo en tiempo real -->
+                            </tbody>
                         </table>
                     </div>
                 </div>
 
+                <!-- Detalle de Sofipos (Renta Fija) -->
                 <div class="card">
-                    <h2>Desglose de Renta Fija: Sofipos e Intereses</h2>
-                    <p style="margin-bottom: 15px; font-size:0.85rem; color: var(--text-muted);">Administra aquí tus Sofipos de forma individual. Los cambios impactan directo al Total General arriba.</p>
+                    <h2>Desglose Renta Fija: Sofipos (Rendimientos Diarios/Semanales)</h2>
                     <div class="table-responsive">
                         <table>
                             <thead>
                                 <tr>
-                                    <th>Nombre de la Sofipo</th>
-                                    <th>Monto Invertido ($)</th>
+                                    <th>Sofipo / Cuenta</th>
+                                    <th>Monto Actual ($)</th>
                                     <th>Tasa Anual (%)</th>
-                                    <th>Interés Anual</th>
+                                    <th>Rend. Diario</th>
+                                    <th>Rend. Semanal</th>
+                                    <th>Rend. Anual</th>
                                     <th>Acción</th>
                                 </tr>
                             </thead>
                             <tbody id="sofipo-rows"></tbody>
                         </table>
                     </div>
-                    <button class="btn-add" onclick="addSofipo()"><i class="fa-solid fa-plus"></i> Agregar Nueva Sofipo</button>
+                    <button class="btn-add" onclick="addSofipo()"><i class="fa-solid fa-plus"></i> Agregar Sofipo</button>
                 </div>
             </div>
 
-            <div class="card" style="max-height: 450px;">
-                <h2>Gráfico de Asignación Patrimonial</h2>
+            <!-- Gráfico Consolidador -->
+            <div class="card">
+                <h2>Asignación Visual del Patrimonio</h2>
                 <div class="chart-container">
                     <canvas id="allocationChart"></canvas>
                 </div>
@@ -140,32 +142,34 @@
         </div>
     </div>
 
+    <!-- PESTAÑA: GBM -->
     <div id="gbm" class="tab-content">
         <div class="card">
-            <h2>Control Renta Variable (Valor Compra vs. Mercado)</h2>
+            <h2>Control Renta Variable: Títulos y Valores del Mercado</h2>
             <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
                             <th>Ticker</th>
                             <th>Títulos</th>
-                            <th>Costo Promedio</th>
-                            <th>Precio Mercado</th>
+                            <th>Costo Promedio ($)</th>
+                            <th>Precio Mercado ($)</th>
                             <th>Total Compra</th>
                             <th>Total Mercado</th>
-                            <th>Plusvalía / Minusvalía</th>
+                            <th>Acción</th>
                         </tr>
                     </thead>
                     <tbody id="gbm-rows"></tbody>
                 </table>
             </div>
+            <button class="btn-add" onclick="addStock()"><i class="fa-solid fa-plus"></i> Agregar Ticker a GBM</button>
         </div>
     </div>
 
+    <!-- PESTAÑA: DIVIDENDOS -->
     <div id="dividendos" class="tab-content">
         <div class="card">
-            <h2>Registro de Dividendos Recibidos: Pilar GBM (2026)</h2>
-            <p style="margin-bottom: 15px; font-size:0.85rem; color: var(--text-muted);">Anota mes a mes los dividendos en efectivo que depositan tus Fibras y Acciones dentro de GBM.</p>
+            <h2>Registro Mensual de Dividendos Recibidos (2026)</h2>
             <div class="table-responsive">
                 <table>
                     <thead>
@@ -173,7 +177,7 @@
                             <th>Origen</th>
                             <th>Ene</th><th>Feb</th><th>Mar</th><th>Abr</th><th>May</th><th>Jun</th>
                             <th>Jul</th><th>Ago</th><th>Sep</th><th>Oct</th><th>Nov</th><th>Dic</th>
-                            <th style="background:#eaf4ff; font-weight: bold;">Sumatoria Anual</th>
+                            <th style="background:#eaf4ff; font-weight: bold;">Total Año</th>
                         </tr>
                     </thead>
                     <tbody id="dividend-rows"></tbody>
@@ -184,56 +188,60 @@
 </div>
 
 <script>
+    // --- DATOS INICIALES REALES CORREGIDOS ---
     const defaultSofipos = [
-        { nombre: "Finsus", monto: 4371.98, tasa: 15.01 },
-        { nombre: "Nu México", monto: 25153.91, tasa: 14.25 },
-        { nombre: "DiDi Cuenta", monto: 5472.37, tasa: 14.00 }
+        { nombre: "Nu México (Cajita)", monto: 25153.91, tasa: 14.25 },
+        { nombre: "DiDi Cuenta", monto: 5472.37, tasa: 14.00 },
+        { nombre: "Finsus", monto: 4371.98, tasa: 15.01 }
     ];
 
-    const defaultPilares = {
+    const defaultPilaresEstaticos = {
         "GBM (Acciones y Fibras)": { saldo: 61673.44, color: "#2b6cb0" },
-        "Yo te presto (P2P)": { saldo: 15485.46, color: "#ed8936" },
+        "Yo te presto (P2P)": { saldo: 15485.46, color: "#ed8936", tasa: 16.50 }, // Tasa añadida y editable
         "Bitso (Cripto)": { saldo: 2800.96, color: "#ecc94b" }
     };
 
     const defaultStocks = [
-        { ticker: "FMTY14.MX", titulos: 1500, costoPromedio: 11.20, precioMercado: 12.05 },
-        { ticker: "IVV_PESO.MX", titulos: 20, costoPromedio: 88.50, precioMercado: 93.10 }
+        { ticker: "FMTY14.MX", titulos: 1500, costoPromedio: 11.20, precioMercado: 12.05 } // IVV_PESO Eliminado con éxito
     ];
 
     const defaultDividendos = [120.50, 245.00, 340.00, 0, 150.25, 0, 0, 0, 0, 0, 0, 0];
 
-    let sofipos = JSON.parse(localStorage.getItem('app_sofipos_v3')) || defaultSofipos;
-    let pilaresEstaticos = JSON.parse(localStorage.getItem('app_pilares_v3')) || defaultPilares;
-    let gbmStocks = JSON.parse(localStorage.getItem('app_stocks_v3')) || defaultStocks;
-    let dividendosGBM = JSON.parse(localStorage.getItem('app_dividendos_v3')) || defaultDividendos;
+    // --- MANEJO DE MEMORIA LOCAL ---
+    let sofipos = JSON.parse(localStorage.getItem('v4_sofipos')) || defaultSofipos;
+    let pilaresEstaticos = JSON.parse(localStorage.getItem('v4_pilares')) || defaultPilaresEstaticos;
+    let gbmStocks = JSON.parse(localStorage.getItem('v4_stocks')) || defaultStocks;
+    let dividendosGBM = JSON.parse(localStorage.getItem('v4_dividendos')) || defaultDividendos;
 
     let allocationChart;
 
-    function saveToStorage() {
-        localStorage.setItem('app_sofipos_v3', JSON.stringify(sofipos));
-        localStorage.setItem('app_pilares_v3', JSON.stringify(pilaresEstaticos));
-        localStorage.setItem('app_stocks_v3', JSON.stringify(gbmStocks));
-        localStorage.setItem('app_dividendos_v3', JSON.stringify(dividendosGBM));
+    function saveAll() {
+        localStorage.setItem('v4_sofipos', JSON.stringify(sofipos));
+        localStorage.setItem('v4_pilares', JSON.stringify(pilaresEstaticos));
+        localStorage.setItem('v4_stocks', JSON.stringify(gbmStocks));
+        localStorage.setItem('v4_dividendos', JSON.stringify(dividendosGBM));
     }
 
     function switchTab(tabId) {
         document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
         document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
         
-        if(event && event.currentTarget) {
-            event.currentTarget.classList.add('active');
-        } else {
-            const activeBtn = document.querySelector(`[onclick="switchTab('${tabId}')"]`);
-            if(activeBtn) activeBtn.classList.add('active');
-        }
+        const currentBtn = document.querySelector(`[onclick="switchTab('${tabId}')"]`);
+        if(currentBtn) currentBtn.classList.add('active');
         document.getElementById(tabId).classList.add('active');
         
-        if(tabId === 'dashboard') { updateDashboard(); }
+        if(tabId === 'dashboard') updateDashboard();
+        if(tabId === 'gbm') renderGBM();
+        if(tabId === 'dividendos') renderDividendos();
     }
 
+    // --- LOGICA DE RENDIMIENTOS Y DASHBOARD ---
     function updateDashboard() {
         let totalSofipos = sofipos.reduce((acc, current) => acc + (parseFloat(current.monto) || 0), 0);
+        let totalGBM = gbmStocks.reduce((acc, current) => acc + ((parseFloat(current.titulos) || 0) * (parseFloat(current.precioMercado) || 0)), 0);
+        
+        // Sincronizar pilar GBM dinámicamente con la pestaña de acciones
+        pilaresEstaticos["GBM (Acciones y Fibras)"].saldo = totalGBM > 0 ? totalGBM : pilaresEstaticos["GBM (Acciones y Fibras)"].saldo;
 
         let todosLosPilares = {
             "GBM (Acciones y Fibras)": { saldo: parseFloat(pilaresEstaticos["GBM (Acciones y Fibras)"].saldo) || 0, color: "#2b6cb0" },
@@ -245,6 +253,7 @@
         let totalPatrimonio = 0;
         Object.keys(todosLosPilares).forEach(p => totalPatrimonio += todosLosPilares[p].saldo);
 
+        // Renderizar Tabla Superior (Pilares Principales)
         const tbodyDashboard = document.getElementById('dashboard-rows');
         tbodyDashboard.innerHTML = '';
 
@@ -252,23 +261,35 @@
             const data = todosLosPilares[pilar];
             const porcentaje = totalPatrimonio > 0 ? ((data.saldo / totalPatrimonio) * 100).toFixed(2) : 0;
             
-            let inputField = pilar === "Sofipos y Renta Fija" 
-                ? `<span style="font-weight: bold; color: #2d3748;">$${data.saldo.toLocaleString('es-MX', {minimumFractionDigits: 2})}</span>`
-                : `<input type="number" step="0.01" value="${data.saldo.toFixed(2)}" oninput="updatePilarEstatico('${pilar}', this.value)">`;
+            let inputField = "";
+            if (pilar === "Sofipos y Renta Fija" || pilar === "GBM (Acciones y Fibras)") {
+                // Son calculados automáticamente para evitar errores humanos
+                inputField = `<strong>$${data.saldo.toLocaleString('es-MX', {minimumFractionDigits: 2})}</strong>`;
+            } else if (pilar === "Yo te presto (P2P)") {
+                // Campo editable con tasa integrada
+                inputField = `
+                    <div style="display:flex; gap:5px; align-items:center;">
+                        <input type="number" step="0.01" style="max-width:110px;" value="${data.saldo.toFixed(2)}" oninput="updatePilarEstaticoValue('${pilar}', this.value)">
+                        <span style="font-size:0.75rem; color:var(--text-muted);">Tasa:</span>
+                        <input type="number" step="0.01" style="max-width:55px; padding:4px;" value="${pilaresEstaticos[pilar].tasa || 16.00}" oninput="updatePilarTasa('${pilar}', this.value)">%
+                    </div>`;
+            } else {
+                inputField = `<input type="number" step="0.01" value="${data.saldo.toFixed(2)}" oninput="updatePilarEstaticoValue('${pilar}', this.value)">`;
+            }
 
             tbodyDashboard.innerHTML += `
                 <tr>
                     <td><strong>${pilar}</strong></td>
                     <td>${inputField}</td>
-                    <td><span class="badge" style="background:${data.color}22; color:${data.color}; font-weight: bold;">${porcentaje}%</span></td>
+                    <td><span class="badge" style="background:${data.color}22; color:${data.color};">${porcentaje}%</span></td>
                 </tr>
             `;
         });
 
         tbodyDashboard.innerHTML += `
-            <tr style="background: #edf2f7; font-weight: bold; font-size:1rem;">
+            <tr style="background: #edf2f7; font-weight: bold;">
                 <td>Total Consolidado</td>
-                <td>$${totalPatrimonio.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
+                <td id="total-general-val">$${totalPatrimonio.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN</td>
                 <td>100%</td>
             </tr>
         `;
@@ -277,45 +298,42 @@
         renderChart(todosLosPilares);
     }
 
-    function updatePilarEstatico(pilar, valor) {
-        if(pilaresEstaticos[pilar]) {
-            pilaresEstaticos[pilar].saldo = parseFloat(valor) || 0;
-        }
-        saveToStorage();
-        let totalSofipos = sofipos.reduce((acc, current) => acc + (parseFloat(current.monto) || 0), 0);
-        let todosLosPilares = {
-            "GBM (Acciones y Fibras)": { saldo: parseFloat(pilaresEstaticos["GBM (Acciones y Fibras)"].saldo) || 0, color: "#2b6cb0" },
-            "Sofipos y Renta Fija": { saldo: totalSofipos, color: "#48bb78" },
-            "Yo te presto (P2P)": { saldo: parseFloat(pilaresEstaticos["Yo te presto (P2P)"].saldo) || 0, color: "#ed8936" },
-            "Bitso (Cripto)": { saldo: parseFloat(pilaresEstaticos["Bitso (Cripto)"].saldo) || 0, color: "#ecc94b" }
-        };
-        renderChart(todosLosPilares);
-        
-        // Actualizar el texto del total sin redibujar inputs para no perder foco
-        let totalPatrimonio = 0;
-        Object.keys(todosLosPilares).forEach(p => totalPatrimonio += todosLosPilares[p].saldo);
-        const totalRow = document.querySelector('#dashboard-rows tr:last-child td:nth-child(2)');
-        if(totalRow) totalRow.innerText = `$${totalPatrimonio.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`;
+    function updatePilarEstaticoValue(pilar, valor) {
+        if(pilaresEstaticos[pilar]) pilaresEstaticos[pilar].saldo = parseFloat(valor) || 0;
+        saveAll();
+        quickRecalculate();
     }
 
+    function updatePilarTasa(pilar, tasa) {
+        if(pilaresEstaticos[pilar]) pilaresEstaticos[pilar].tasa = parseFloat(tasa) || 0;
+        saveAll();
+    }
+
+    // --- COMPORTAMIENTO DE SOFIPOS COHESIVO ---
     function renderSofiposTable() {
         const tbodySofipo = document.getElementById('sofipo-rows');
         tbodySofipo.innerHTML = '';
 
-        let sumaInteresesAnuales = 0;
+        let sumaAnual = 0;
 
         sofipos.forEach((sofipo, index) => {
-            const capital = parseFloat(sofipo.monto) || 0;
-            const tasaInteres = parseFloat(sofipo.tasa) || 0;
-            const interesEstimado = capital * (tasaInteres / 100);
-            sumaInteresesAnuales += interesEstimado;
+            const cap = parseFloat(sofipo.monto) || 0;
+            const t = parseFloat(sofipo.tasa) || 0;
+            
+            const rendAnual = cap * (t / 100);
+            const rendSemanal = rendAnual / 52;
+            const rendDiario = rendAnual / 365;
+            
+            sumaAnual += rendAnual;
 
             tbodySofipo.innerHTML += `
                 <tr>
-                    <td><input type="text" value="${sofipo.nombre}" oninput="updateSofipoItem(${index}, 'nombre', this.value)"></td>
-                    <td><input type="number" step="0.01" value="${sofipo.monto}" oninput="updateSofipoItem(${index}, 'monto', this.value)"></td>
-                    <td><input type="number" step="0.01" value="${sofipo.tasa}" oninput="updateSofipoItem(${index}, 'tasa', this.value)"></td>
-                    <td style="color: var(--success); font-weight: 600;">$${interesEstimado.toFixed(2)}</td>
+                    <td><input type="text" value="${sofipo.nombre}" oninput="updateSofipoData(${index}, 'nombre', this.value)"></td>
+                    <td><input type="number" step="0.01" value="${sofipo.monto}" oninput="updateSofipoData(${index}, 'monto', this.value)"></td>
+                    <td><input type="number" step="0.01" value="${sofipo.tasa}" oninput="updateSofipoData(${index}, 'tasa', this.value)">%</td>
+                    <td class="text-success-val">$${rendDiario.toFixed(2)}</td>
+                    <td class="text-success-val" style="background: #f0fff4;">$${rendSemanal.toFixed(2)}</td>
+                    <td class="text-success-val">$${rendAnual.toFixed(2)}</td>
                     <td><button class="btn-delete" onclick="deleteSofipo(${index})"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
             `;
@@ -323,20 +341,36 @@
 
         if(sofipos.length > 0) {
             tbodySofipo.innerHTML += `
-                <tr id="total-sofipos-row" style="background: #f7fafc; font-weight: bold; font-size:0.85rem;">
-                    <td>Rendimiento Total</td>
+                <tr style="background: #f7fafc; font-weight: bold; font-size:0.8rem;">
+                    <td>Proyección Total Renta Fija</td>
                     <td colspan="2"></td>
-                    <td style="color: #22543d; background: #c6f6d5; padding: 8px 12px; border-radius: 6px;" colspan="2">+$${sumaInteresesAnuales.toLocaleString('es-MX', {minimumFractionDigits: 2})} / año</td>
+                    <td style="color:#22543d;">$${(sumaAnual/365).toFixed(2)}/día</td>
+                    <td style="color:#22543d; background:#c6f6d5;">$${(sumaAnual/52).toFixed(2)}/sem</td>
+                    <td style="color:#22543d;">$${sumaAnual.toLocaleString('es-MX',{maximumFractionDigits:2})}/año</td>
+                    <td></td>
                 </tr>
             `;
         }
     }
 
-    function updateSofipoItem(index, campo, valor) {
+    function updateSofipoData(index, campo, valor) {
         sofipos[index][campo] = valor;
-        saveToStorage();
+        saveAll();
         
-        // Recalculo dinámico en tiempo real de los campos numéricos
+        // Actualización fluida en vivo sin quitar el foco del teclado del iPhone
+        const row = document.getElementById('sofipo-rows').children[index];
+        if(row && (campo === 'monto' || campo === 'tasa')) {
+            const cap = parseFloat(sofipos[index].monto) || 0;
+            const t = parseFloat(sofipos[index].tasa) || 0;
+            const rAnual = cap * (t / 100);
+            row.children[3].innerText = `$${(rAnual / 365).toFixed(2)}`;
+            row.children[4].innerText = `$${(rAnual / 52).toFixed(2)}`;
+            row.children[5].innerText = `$${rAnual.toFixed(2)}`;
+        }
+        quickRecalculate();
+    }
+
+    function quickRecalculate() {
         let totalSofipos = sofipos.reduce((acc, current) => acc + (parseFloat(current.monto) || 0), 0);
         let todosLosPilares = {
             "GBM (Acciones y Fibras)": { saldo: parseFloat(pilaresEstaticos["GBM (Acciones y Fibras)"].saldo) || 0, color: "#2b6cb0" },
@@ -344,117 +378,123 @@
             "Yo te presto (P2P)": { saldo: parseFloat(pilaresEstaticos["Yo te presto (P2P)"].saldo) || 0, color: "#ed8936" },
             "Bitso (Cripto)": { saldo: parseFloat(pilaresEstaticos["Bitso (Cripto)"].saldo) || 0, color: "#ecc94b" }
         };
-        renderChart(todosLosPilares);
-
-        // Actualizar visualmente la celda del interés de esta fila sin redibujar la tabla
-        const row = document.getElementById('sofipo-rows').children[index];
-        if(row && (campo === 'monto' || campo === 'tasa')) {
-            const cap = parseFloat(sofipos[index].monto) || 0;
-            const tas = parseFloat(sofipos[index].tasa) || 0;
-            row.children[3].innerText = `$${(cap * (tas / 100)).toFixed(2)}`;
-        }
-
-        // Actualizar fila resumen superior
-        const sofipoCell = document.querySelector('#dashboard-rows tr:nth-child(2) td:nth-child(2) span');
-        if(sofipoCell) sofipoCell.innerText = `$${totalSofipos.toLocaleString('es-MX', {minimumFractionDigits: 2})}`;
 
         let totalPatrimonio = 0;
         Object.keys(todosLosPilares).forEach(p => totalPatrimonio += todosLosPilares[p].saldo);
-        const totalRow = document.querySelector('#dashboard-rows tr:last-child td:nth-child(2)');
-        if(totalRow) totalRow.innerText = `$${totalPatrimonio.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`;
+        
+        // Actualizar etiqueta del total superior
+        const totalLabel = document.getElementById('total-general-val');
+        if(totalLabel) totalLabel.innerText = `$${totalPatrimonio.toLocaleString('es-MX', {minimumFractionDigits: 2})} MXN`;
+        
+        // Actualizar número impreso estático de Sofipos en la primera tabla
+        const sofipoCell = document.querySelector('#dashboard-rows tr:nth-child(2) td:nth-child(2) strong');
+        if(sofipoCell) sofipoCell.innerText = `$${totalSofipos.toLocaleString('es-MX', {minimumFractionDigits: 2})}`;
+
+        renderChart(todosLosPilares);
     }
 
     function addSofipo() {
-        sofipos.push({ nombre: "Nueva Sofipo", monto: 0, tasa: 10.00 });
-        saveToStorage();
+        sofipos.push({ nombre: "Nueva Cuenta", monto: 0, tasa: 10.00 });
+        saveAll();
         updateDashboard();
     }
 
     function deleteSofipo(index) {
         sofipos.splice(index, 1);
-        saveToStorage();
+        saveAll();
         updateDashboard();
     }
 
-    function renderChart(todosLosPilares) {
-        const ctx = document.getElementById('allocationChart').getContext('2d');
-        const labels = Object.keys(todosLosPilares);
-        const dataValues = labels.map(p => parseFloat(todosLosPilares[p].saldo) || 0);
-        const colors = labels.map(p => todosLosPilares[p].color);
-
-        if (allocationChart) { allocationChart.destroy(); }
-
-        allocationChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: {
-                labels: labels,
-                datasets: [{ data: dataValues, backgroundColor: colors, borderWidth: 2 }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: { legend: { position: 'bottom' } }
-            }
-        });
-    }
-
+    // --- CONTROL RENTA VARIABLE (GBM DE VERDAD) ---
     function renderGBM() {
         const tbody = document.getElementById('gbm-rows');
         tbody.innerHTML = '';
 
         gbmStocks.forEach((stock, index) => {
-            const totalCompra = stock.titulos * stock.costoPromedio;
-            const totalMercado = stock.titulos * stock.precioMercado;
-            const plusvaliaNum = totalMercado - totalCompra;
-            const plusvaliaPorc = totalCompra > 0 ? (plusvaliaNum / totalCompra) * 100 : 0;
+            const t = parseFloat(stock.titulos) || 0;
+            const cp = parseFloat(stock.costoPromedio) || 0;
+            const pm = parseFloat(stock.precioMercado) || 0;
             
-            const badgeClass = plusvaliaNum >= 0 ? 'badge-success' : 'badge-danger';
-            const sign = plusvaliaNum >= 0 ? '+' : '';
-
             tbody.innerHTML += `
                 <tr>
-                    <td><strong>${stock.ticker}</strong></td>
-                    <td><input type="number" value="${stock.titulos}" oninput="updateStock(${index}, 'titulos', this.value)"></td>
-                    <td><input type="number" step="0.01" value="${stock.costoPromedio}" oninput="updateStock(${index}, 'costoPromedio', this.value)"></td>
-                    <td>$${stock.precioMercado.toFixed(2)}</td>
-                    <td>$${totalCompra.toLocaleString('es-MX', {minimumFractionDigits:2})}</td>
-                    <td>$${totalMercado.toLocaleString('es-MX', {minimumFractionDigits:2})}</td>
-                    <td><span class="badge ${badgeClass}">${sign}$${plusvaliaNum.toLocaleString('es-MX', {minimumFractionDigits:2})} (${sign}${plusvaliaPorc.toFixed(2)}%)</span></td>
+                    <td><input type="text" value="${stock.ticker}" oninput="updateStockItem(${index}, 'ticker', this.value)"></td>
+                    <td><input type="number" value="${t}" oninput="updateStockItem(${index}, 'titulos', this.value)"></td>
+                    <td><input type="number" step="0.01" value="${cp}" oninput="updateStockItem(${index}, 'costoPromedio', this.value)"></td>
+                    <td><input type="number" step="0.01" value="${pm}" oninput="updateStockItem(${index}, 'precioMercado', this.value)"></td>
+                    <td>$${(t * cp).toLocaleString('es-MX',{minimumFractionDigits:2})}</td>
+                    <td style="font-weight:bold;">$${(t * pm).toLocaleString('es-MX',{minimumFractionDigits:2})}</td>
+                    <td><button class="btn-delete" onclick="deleteStock(${index})"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
             `;
         });
     }
 
-    function updateStock(index, field, value) {
-        gbmStocks[index][field] = parseFloat(value) || 0;
-        saveToStorage();
+    function updateStockItem(index, campo, valor) {
+        gbmStocks[index][campo] = valor;
+        saveAll();
     }
 
+    function addStock() {
+        gbmStocks.push({ ticker: "NUEVO.MX", titulos: 0, costoPromedio: 0, precioMercado: 0 });
+        saveAll();
+        renderGBM();
+    }
+
+    function deleteStock(index) {
+        gbmStocks.splice(index, 1);
+        saveAll();
+        renderGBM();
+    }
+
+    // --- HISTORIAL MENSUAL ---
     function renderDividendos() {
         const tbody = document.getElementById('dividend-rows');
         tbody.innerHTML = '';
         
         let sumatoriaAnual = 0;
-        let filaHtml = `<tr><td><strong>GBM (Dividendos / Fibras)</strong></td>`;
+        let filaHtml = `<tr><td><strong>GBM Efectivo</strong></td>`;
 
         dividendosGBM.forEach((monto, mesIndex) => {
-            sumatoriaAnual += monto;
-            filaHtml += `<td><input type="number" step="0.01" value="${monto || ''}" placeholder="0" oninput="updateDividendo(${mesIndex}, this.value)"></td>`;
+            sumatoriaAnual += parseFloat(monto) || 0;
+            filaHtml += `<td><input type="number" step="0.01" value="${monto || ''}" placeholder="0" oninput="updateDividendoVal(${mesIndex}, this.value)"></td>`;
         });
 
-        filaHtml += `<td style="background:#edf2f7; font-weight:bold; color:#1a365d; font-size:1rem;">$${sumatoriaAnual.toFixed(2)}</td></tr>`;
+        filaHtml += `<td style="background:#eaf4ff; font-weight:bold; color:#1a365d;">$${sumatoriaAnual.toFixed(2)}</td></tr>`;
         tbody.innerHTML = filaHtml;
     }
 
-    function updateDividendo(mesIndex, valor) {
+    function updateDividendoVal(mesIndex, valor) {
         dividendosGBM[mesIndex] = parseFloat(valor) || 0;
-        saveToStorage();
+        saveAll();
     }
 
+    // --- GRAFICA DOUGHNUT ---
+    function renderChart(todosLosPilares) {
+        const ctx = document.getElementById('allocationChart').getContext('2d');
+        const labels = Object.keys(todosLosPilares);
+        const dataValues = labels.map(p => todosLosPilares[p].saldo);
+        const colors = labels.map(p => todosLosPilares[p].color);
+
+        if (allocationChart) allocationChart.destroy();
+
+        allocationChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{ data: dataValues, backgroundColor: colors, borderWidth: 1.5 }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, font: { size: 10 } } } }
+            }
+        });
+    }
+
+    // Inicializar app
     updateDashboard();
-    renderGBM();
-    renderDividendos();
 </script>
 
 </body>
 </html>
+
