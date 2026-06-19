@@ -18,55 +18,49 @@
             --border-color: #e2e8f0;
             --success: #48bb78;
             --danger: #f56565;
+            --warning: #ecc94b;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: var(--bg-primary); color: var(--text-main); padding: 10px; -webkit-text-size-adjust: 100%; }
+        body { background-color: var(--bg-primary); color: var(--text-main); padding: 8px; -webkit-text-size-adjust: 100%; }
         .container { max-width: 1200px; margin: 0 auto; }
         
-        header { margin-bottom: 15px; text-align: center; padding-top: 5px; }
-        header h1 { color: var(--accent-hover); font-size: 1.5rem; margin-bottom: 3px; }
-        header p { color: var(--text-muted); font-size: 0.85rem; }
+        header { margin-bottom: 12px; text-align: center; padding-top: 5px; }
+        header h1 { color: var(--accent-hover); font-size: 1.4rem; margin-bottom: 2px; }
+        header p { color: var(--text-muted); font-size: 0.8rem; }
 
-        .tabs { display: flex; justify-content: space-between; gap: 5px; margin-bottom: 15px; background: #e2e8f0; padding: 4px; border-radius: 8px; }
+        .tabs { display: flex; gap: 4px; margin-bottom: 12px; background: #e2e8f0; padding: 4px; border-radius: 8px; overflow-x: auto; }
         .tab-btn { 
-            flex: 1; background: transparent; border: none; padding: 10px 5px;
+            flex: 1; background: transparent; border: none; padding: 8px 4px; min-width: 75px;
             font-weight: 600; cursor: pointer; border-radius: 6px; color: var(--text-main);
-            transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 0.8rem;
+            transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 0.75rem; white-space: nowrap;
         }
         .tab-btn.active { background: var(--card-bg); color: var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-
-        .grid-dashboard { display: grid; grid-template-columns: 1fr; gap: 15px; }
-        @media (min-width: 992px) { .grid-dashboard { grid-template-columns: 1.2fr 0.8fr; } }
         
-        .card { background: var(--card-bg); border-radius: 12px; padding: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); border: 1px solid var(--border-color); margin-bottom: 15px; }
-        .card h2 { font-size: 1rem; color: var(--accent-hover); margin-bottom: 10px; padding-bottom: 4px; border-bottom: 1px solid var(--border-color); }
+        .card { background: var(--card-bg); border-radius: 12px; padding: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); border: 1px solid var(--border-color); margin-bottom: 12px; }
+        .card h2 { font-size: 0.95rem; color: var(--accent-hover); margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 6px; }
 
         .table-responsive { overflow-x: auto; width: 100%; width: -webkit-fill-available; margin-bottom: 5px; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.8rem; table-layout: fixed; }
-        th, td { padding: 8px 6px; border-bottom: 1px solid var(--border-color); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.78rem; }
+        th, td { padding: 6px 4px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
         th { background-color: #f7fafc; color: var(--text-main); font-weight: 600; }
         
-        input[type="number"], input[type="text"] { 
-            width: 100%; padding: 6px; border: 1px solid var(--border-color); border-radius: 6px; 
-            color: var(--text-main); font-size: 0.8rem; background-color: #f8fafc; -webkit-appearance: none;
+        input, select { 
+            width: 100%; padding: 5px; border: 1px solid var(--border-color); border-radius: 6px; 
+            color: var(--text-main); font-size: 0.78rem; background-color: #f8fafc; -webkit-appearance: none;
         }
-        input:focus { background-color: #ffffff; border-color: var(--accent); outline: none; }
+        input:focus, select:focus { background-color: #ffffff; border-color: var(--accent); outline: none; }
         
-        .badge { padding: 3px 5px; border-radius: 4px; font-weight: bold; font-size: 0.75rem; }
-        .chart-container { position: relative; margin: auto; height: 240px; width: 100%; }
-        .btn-add { background: var(--success); color: white; border: none; padding: 8px 12px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.8rem; margin-top: 8px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 4px; }
-        .btn-delete { background: var(--danger); color: white; border: none; padding: 6px; border-radius: 6px; cursor: pointer; width: 100%; }
+        .badge { padding: 2px 4px; border-radius: 4px; font-weight: bold; font-size: 0.7rem; }
+        .chart-container { position: relative; margin: auto; height: 180px; width: 100%; }
+        .btn-add { background: var(--success); color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.75rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 5px; }
+        .btn-delete { background: var(--danger); color: white; border: none; padding: 5px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         
-        /* Ajustes responsivos para que quepa todo en el celular sin hacer scroll horizontal */
-        @media (max-width: 576px) {
-            th.hide-mobile, td.hide-mobile { display: none; }
-            table { font-size: 0.78rem; }
-            th, td { padding: 6px 4px; }
-        }
+        .grid-2 { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        @media (min-width: 768px) { .grid-2 { grid-template-columns: 1fr 1fr; } .chart-container { height: 220px; } }
     </style>
 </head>
 <body>
@@ -79,89 +73,123 @@
 
     <div class="tabs">
         <button class="tab-btn active" onclick="switchTab('dashboard')"><i class="fa-solid fa-chart-pie"></i> General</button>
-        <button class="tab-btn" onclick="switchTab('gbm')"><i class="fa-solid fa-chart-line"></i> GBM (En Vivo)</button>
+        <button class="tab-btn" onclick="switchTab('gbm')"><i class="fa-solid fa-chart-line"></i> GBM</button>
         <button class="tab-btn" onclick="switchTab('dividendos')"><i class="fa-solid fa-hand-holding-dollar"></i> Divs</button>
+        <button class="tab-btn" onclick="switchTab('seguimiento')"><i class="fa-solid fa-eye"></i> Radar</button>
     </div>
 
-    <!-- PESTAÑA: DASHBOARD -->
+    <!-- PESTAÑA: DASHBOARD GENERAL -->
     <div id="dashboard" class="tab-content active">
-        <div class="grid-dashboard">
+        <div class="grid-2">
             <div>
                 <div class="card">
                     <h2>Distribución Real por Pilar</h2>
                     <div class="table-responsive">
-                        <table style="table-layout: auto;">
-                            <thead>
-                                <tr><th>Pilar</th><th>Monto ($)</th><th>%</th></tr>
-                            </thead>
+                        <table>
+                            <thead><tr><th>Pilar</th><th>Monto ($)</th><th>%</th></tr></thead>
                             <tbody id="dashboard-rows"></tbody>
                         </table>
                     </div>
                 </div>
-
                 <div class="card">
                     <h2>Renta Fija: Sofipos (Cálculo Diario)</h2>
                     <div class="table-responsive">
-                        <table style="table-layout: auto;">
-                            <thead>
-                                <tr><th>Cuenta</th><th>Monto ($)</th><th>Tasa</th><th class="hide-mobile">Semanal</th><th>Acción</th></tr>
-                            </thead>
+                        <table>
+                            <thead><tr><th>Cuenta</th><th>Monto ($)</th><th>Tasa</th><th>Acción</th></tr></thead>
                             <tbody id="sofipo-rows"></tbody>
                         </table>
                     </div>
                     <button class="btn-add" onclick="addSofipo()"><i class="fa-solid fa-plus"></i> Añadir Cuenta</button>
                 </div>
             </div>
-
             <div class="card">
                 <h2>Asignación Visual</h2>
-                <div class="chart-container">
-                    <canvas id="allocationChart"></canvas>
-                </div>
+                <div class="chart-container"><canvas id="allocationChart"></canvas></div>
             </div>
         </div>
     </div>
 
-    <!-- PESTAÑA: GBM AUTOMATIZADO -->
+    <!-- PESTAÑA: GBM TOTALMENTE EDITABLE -->
     <div id="gbm" class="tab-content">
         <div class="card">
-            <h2>Renta Variable (Precios de Mercado vía Yahoo Finance)</h2>
+            <h2>Renta Variable (Precios de Mercado Modificables)</h2>
             <div class="table-responsive">
-                <table style="table-layout: auto;">
+                <table>
                     <thead>
                         <tr>
                             <th>Ticker</th>
                             <th>Títulos</th>
-                            <th class="hide-mobile">Costo Prom.</th>
-                            <th>Precio Real</th>
+                            <th>Precio Mkt ($)</th>
                             <th>Total Mkt</th>
-                            <th style="width: 40px;"></th>
+                            <th style="width:30px;"></th>
                         </tr>
                     </thead>
                     <tbody id="gbm-rows"></tbody>
                 </table>
             </div>
-            <button class="btn-add" onclick="addStock()"><i class="fa-solid fa-plus"></i> Agregar Activo</button>
+            <button class="btn-add" onclick="addStock()"><i class="fa-solid fa-plus"></i> Agregar Activo a GBM</button>
         </div>
     </div>
 
-    <!-- PESTAÑA: DIVIDENDOS -->
+    <!-- PESTAÑA: DIVIDENDOS DETALLADOS + AVISOS -->
     <div id="dividendos" class="tab-content">
         <div class="card">
-            <h2>Historial de Dividendos (2026)</h2>
+            <h2><i class="fa-solid fa-bullhorn" style="color:var(--accent);"></i> Avisos y Próximos Pagos</h2>
             <div class="table-responsive">
-                <table style="table-layout: auto;">
+                <table>
+                    <thead><tr><th>Activo</th><th>Fecha Ex-Div</th><th>Fecha Pago</th><th>Monto por Tít.</th><th style="width:30px;"></th></tr></thead>
+                    <tbody id="avisos-rows"></tbody>
+                </table>
+            </div>
+            <button class="btn-add" onclick="addAviso()"><i class="fa-solid fa-plus"></i> Añadir Aviso de Pago</button>
+        </div>
+
+        <div class="card">
+            <h2><i class="fa-solid fa-receipt" style="color:var(--success);"></i> Desglose de Dividendos Cobrados</h2>
+            <div class="table-responsive">
+                <table>
                     <thead>
-                        <tr><th>Origen</th><th>Ene-Mar</th><th>Abr-Jun</th><th>Jul-Sep</th><th>Oct-Dic</th><th>Total</th></tr>
+                        <tr>
+                            <th style="width:75px;">Mes</th>
+                            <th>Activo</th>
+                            <th>Bruto ($)</th>
+                            <th>ISR ($)</th>
+                            <th>Neto ($)</th>
+                            <th style="width:30px;"></th>
+                        </tr>
                     </thead>
                     <tbody id="dividend-rows"></tbody>
                 </table>
             </div>
+            <button class="btn-add" onclick="addDividendo()"><i class="fa-solid fa-plus"></i> Registrar Cobro</button>
+        </div>
+    </div>
+
+    <!-- PESTAÑA: LISTA DE SEGUIMIENTO (RADAR DE PRECIOS) -->
+    <div id="seguimiento" class="tab-content">
+        <div class="card">
+            <h2><i class="fa-solid fa-binoculars"></i> Lista de Seguimiento (Oportunidades de Compra)</h2>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Activo</th>
+                            <th>Precio Actual ($)</th>
+                            <th>Precio Objetivo ($)</th>
+                            <th>Estado</th>
+                            <th style="width:30px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody id="watchlist-rows"></tbody>
+                </table>
+            </div>
+            <button class="btn-add" onclick="addWatchlistItem()"><i class="fa-solid fa-plus"></i> Agregar al Radar</button>
         </div>
     </div>
 </div>
 
 <script>
+    // --- DATOS INICIALES REALES AJUSTADOS ---
     const defaultSofipos = [
         { nombre: "Nu México", monto: 25153.91, tasa: 14.25 },
         { nombre: "DiDi Cuenta", monto: 5472.37, tasa: 14.00 },
@@ -169,28 +197,43 @@
     ];
 
     const defaultPilaresEstaticos = {
-        "GBM (Acciones y Fibras)": { saldo: 61673.44, color: "#2b6cb0" },
-        "Yo te presto (P2P)": { saldo: 15485.46, color: "#ed8936", tasa: 16.50 },
+        "GBM (Acciones y Fibras)": { saldo: 434.00, color: "#2b6cb0" },
+        "Yo te presto (P2P)": { saldo: 15485.46, color: "#ed8936" }, // Nombre corregido con éxito
         "Bitso (Cripto)": { saldo: 2800.96, color: "#ecc94b" }
     };
 
     const defaultStocks = [
-        { ticker: "FMTY14.MX", titulos: 1500, costoPromedio: 11.20, precioMercado: 12.05 }
+        { ticker: "FMTY14.MX", titulos: 36, precioMercado: 14.06 } // Precio corregido a $14.06 basándonos en image_19.png
     ];
 
-    const defaultDividendos = [120.50, 245.00, 340.00, 150.25];
+    const defaultDividendos = [
+        { mes: "Enero", activo: "FMTY14", bruto: 100.00, isr: 30.00 }
+    ];
 
-    let sofipos = JSON.parse(localStorage.getItem('v5_sofipos')) || defaultSofipos;
-    let pilaresEstaticos = JSON.parse(localStorage.getItem('v5_pilares')) || defaultPilaresEstaticos;
-    let gbmStocks = JSON.parse(localStorage.getItem('v5_stocks')) || defaultStocks;
-    let dividendosGBM = JSON.parse(localStorage.getItem('v5_dividendos')) || defaultDividendos;
+    const defaultAvisos = [
+        { activo: "FMTY14", exdiv: "2026-06-25", pago: "2026-06-30", monto: 0.085 }
+    ];
+
+    const defaultWatchlist = [
+        { activo: "AC.MX", actual: 165.00, objetivo: 155.00 }
+    ];
+
+    // Cargar o Inicializar Memoria
+    let sofipos = JSON.parse(localStorage.getItem('v6_sofipos')) || defaultSofipos;
+    let pilaresEstaticos = JSON.parse(localStorage.getItem('v6_pilares')) || defaultPilaresEstaticos;
+    let gbmStocks = JSON.parse(localStorage.getItem('v6_stocks')) || defaultStocks;
+    let dividendos = JSON.parse(localStorage.getItem('v6_dividendos')) || defaultDividendos;
+    let avisos = JSON.parse(localStorage.getItem('v6_avisos')) || defaultAvisos;
+    let watchlist = JSON.parse(localStorage.getItem('v6_watchlist')) || defaultWatchlist;
     let allocationChart;
 
     function saveAll() {
-        localStorage.setItem('v5_sofipos', JSON.stringify(sofipos));
-        localStorage.setItem('v5_pilares', JSON.stringify(pilaresEstaticos));
-        localStorage.setItem('v5_stocks', JSON.stringify(gbmStocks));
-        localStorage.setItem('v5_dividendos', JSON.stringify(dividendosGBM));
+        localStorage.setItem('v6_sofipos', JSON.stringify(sofipos));
+        localStorage.setItem('v6_pilares', JSON.stringify(pilaresEstaticos));
+        localStorage.setItem('v6_stocks', JSON.stringify(gbmStocks));
+        localStorage.setItem('v6_dividendos', JSON.stringify(dividendos));
+        localStorage.setItem('v6_avisos', JSON.stringify(avisos));
+        localStorage.setItem('v6_watchlist', JSON.stringify(watchlist));
     }
 
     function switchTab(tabId) {
@@ -201,45 +244,21 @@
         document.getElementById(tabId).classList.add('active');
         
         if(tabId === 'dashboard') updateDashboard();
-        if(tabId === 'gbm') { fetchAllMarketPrices(); renderGBM(); }
-        if(tabId === 'dividendos') renderDividendos();
+        if(tabId === 'gbm') renderGBM();
+        if(tabId === 'dividendos') { renderDividendos(); renderAvisos(); }
+        if(tabId === 'seguimiento') renderWatchlist();
     }
 
-    // --- CONSUMO DE PRECIOS EN VIVO DE YAHOO FINANCE ---
-    async function fetchMarketPrice(ticker) {
-        if (!ticker || ticker.includes("NUEVO")) return null;
-        try {
-            // Usamos un proxy de red abierto de Yahoo Finance para cargar cotizaciones instantáneas sin tokens
-            const res = await fetch(`https://query1.finance.yahoo.com/v7/finance/quote?symbols=${ticker}`);
-            const data = await res.json();
-            if(data.quoteResponse && data.quoteResponse.result.length > 0) {
-                return data.quoteResponse.result[0].regularMarketPrice;
-            }
-        } catch (e) { console.log("Error consultando Yahoo para " + ticker, e); }
-        return null;
-    }
-
-    async function fetchAllMarketPrices() {
-        let cambio = false;
-        for(let i=0; i < gbmStocks.length; i++) {
-            const livePrice = await fetchMarketPrice(gbmStocks[i].ticker);
-            if(livePrice) {
-                gbmStocks[i].precioMercado = livePrice;
-                cambio = true;
-            }
-        }
-        if(cambio) { saveAll(); renderGBM(); }
-    }
-
+    // --- TABLA PRINCIPAL Y PILARES ---
     function updateDashboard() {
         let totalSofipos = sofipos.reduce((acc, c) => acc + (parseFloat(c.monto) || 0), 0);
         let totalGBM = gbmStocks.reduce((acc, c) => acc + ((parseFloat(c.titulos) || 0) * (parseFloat(c.precioMercado) || 0)), 0);
         
-        if(totalGBM > 0) pilaresEstaticos["GBM (Acciones y Fibras)"].saldo = totalGBM;
+        pilaresEstaticos["GBM (Acciones y Fibras)"].saldo = totalGBM;
 
         let todosLosPilares = {
-            "GBM (Acciones y Fibras)": { saldo: pilaresEstaticos["GBM (Acciones y Fibras)"].saldo, color: "#2b6cb0" },
-            "Sofipos y Renta Fija": { saldo: totalSofipos, color: "#48bb78" },
+            "GBM (Acciones y Fibras)": { saldo: totalGBM, color: "#2b6cb0" },
+            "Sofipos": { saldo: totalSofipos, color: "#48bb78" },
             "Yo te presto (P2P)": { saldo: parseFloat(pilaresEstaticos["Yo te presto (P2P)"].saldo) || 0, color: "#ed8936" },
             "Bitso (Cripto)": { saldo: parseFloat(pilaresEstaticos["Bitso (Cripto)"].saldo) || 0, color: "#ecc94b" }
         };
@@ -252,14 +271,15 @@
         Object.keys(todosLosPilares).forEach(pilar => {
             const data = todosLosPilares[pilar];
             const pct = totalPatrimonio > 0 ? ((data.saldo / totalPatrimonio) * 100).toFixed(1) : 0;
-            let displayField = pilar.includes("Sofipos") || pilar.includes("GBM") ? 
-                `<strong>$${data.saldo.toLocaleString('es-MX',{maximumFractionDigits:0})}</strong>` :
+            
+            let displayField = pilar === "Sofipos" || pilar === "GBM (Acciones y Fibras)" ? 
+                `<strong>$${data.saldo.toLocaleString('es-MX',{minimumFractionDigits:2})}</strong>` :
                 `<input type="number" step="0.01" value="${data.saldo}" oninput="updatePilarValue('${pilar}', this.value)">`;
 
-            tbodyDashboard.innerHTML += `<tr><td><strong>${pilar.split(" ")[0]}</strong></td><td>${displayField}</td><td><span class="badge" style="background:${data.color}22; color:${data.color};">${pct}%</span></td></tr>`;
+            tbodyDashboard.innerHTML += `<tr><td><strong>${pilar}</strong></td><td>${displayField}</td><td><span class="badge" style="background:${data.color}22; color:${data.color};">${pct}%</span></td></tr>`;
         });
 
-        tbodyDashboard.innerHTML += `<tr style="background:#e2e8f0; font-weight:bold;"><td>Total</td><td colspan="2">$${totalPatrimonio.toLocaleString('es-MX',{maximumFractionDigits:2})}</td></tr>`;
+        tbodyDashboard.innerHTML += `<tr style="background:#e2e8f0; font-weight:bold;"><td>Total Consolidado</td><td colspan="2">$${totalPatrimonio.toLocaleString('es-MX',{minimumFractionDigits:2})} MXN</td></tr>`;
         renderSofiposTable();
         renderChart(todosLosPilares);
     }
@@ -267,32 +287,36 @@
     function updatePilarValue(pilar, val) {
         if(pilaresEstaticos[pilar]) pilaresEstaticos[pilar].saldo = parseFloat(val) || 0;
         saveAll();
-        setTimeout(updateDashboard, 600);
+        // Recalcular gráfica sin interrumpir escritura pesadamente
+        let totalSofipos = sofipos.reduce((acc, c) => acc + (parseFloat(c.monto) || 0), 0);
+        let totalGBM = gbmStocks.reduce((acc, c) => acc + ((parseFloat(c.titulos) || 0) * (parseFloat(c.precioMercado) || 0)), 0);
+        renderChart({
+            "GBM (Acciones y Fibras)": { saldo: totalGBM, color: "#2b6cb0" },
+            "Sofipos": { saldo: totalSofipos, color: "#48bb78" },
+            "Yo te presto (P2P)": { saldo: parseFloat(pilaresEstaticos["Yo te presto (P2P)"].saldo) || 0, color: "#ed8936" },
+            "Bitso (Cripto)": { saldo: parseFloat(pilaresEstaticos["Bitso (Cripto)"].saldo) || 0, color: "#ecc94b" }
+        });
     }
 
     function renderSofiposTable() {
         const tbody = document.getElementById('sofipo-rows');
         tbody.innerHTML = '';
         sofipos.forEach((s, idx) => {
-            const rSem = ((parseFloat(s.monto)||0) * ((parseFloat(s.tasa)||0)/100)) / 52;
             tbody.innerHTML += `
                 <tr>
-                    <td><input type="text" value="${s.nombre}" oninput="updateSofipo(${idx}, 'nombre', this.value)"></td>
+                    <td><input type="text" value="${s.nombre}" oninput="sofipos(${idx}, 'nombre', this.value)"></td>
                     <td><input type="number" step="0.01" value="${s.monto}" oninput="updateSofipo(${idx}, 'monto', this.value)"></td>
-                    <td><input type="number" step="0.1" value="${s.tasa}" style="width:50px;" oninput="updateSofipo(${idx}, 'tasa', this.value)">%</td>
-                    <td class="hide-mobile" style="color:var(--success); font-weight:600;">$${rSem.toFixed(1)}</td>
+                    <td><input type="number" step="0.01" value="${s.tasa}" style="min-width:45px;" oninput="updateSofipo(${idx}, 'tasa', this.value)"></td>
                     <td><button class="btn-delete" onclick="deleteSofipo(${idx})"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>`;
         });
     }
 
-    function updateSofipo(idx, fld, val) {
-        sofipos[idx][fld] = val; saveAll();
-    }
+    function updateSofipo(idx, fld, val) { sofipos[idx][fld] = val; saveAll(); }
     function addSofipo() { sofipos.push({nombre:"Nueva", monto:0, tasa:14}); saveAll(); updateDashboard(); }
     function deleteSofipo(idx) { sofipos.splice(idx,1); saveAll(); updateDashboard(); }
 
-    // --- PESTAÑA GBM RESPONSIVA CON PRECIOS AUTOMÁTICOS ---
+    // --- PESTAÑA GBM: TOTALMENTE MANUAL Y EDITABLE ---
     function renderGBM() {
         const tbody = document.getElementById('gbm-rows');
         tbody.innerHTML = '';
@@ -302,45 +326,118 @@
             const totMkt = t * pm;
             tbody.innerHTML += `
                 <tr>
-                    <td><input type="text" value="${stk.ticker}" placeholder="ej: BIMBOA.MX" onchange="updateStock(${idx}, 'ticker', this.value)"></td>
+                    <td><input type="text" value="${stk.ticker}" oninput="updateStock(${idx}, 'ticker', this.value)"></td>
                     <td><input type="number" value="${t}" oninput="updateStock(${idx}, 'titulos', this.value)"></td>
-                    <td class="hide-mobile"><input type="number" value="${stk.costoPromedio}" oninput="updateStock(${idx}, 'costoPromedio', this.value)"></td>
-                    <td style="font-weight:600; color:var(--accent);">$${pm.toFixed(2)}</td>
-                    <td style="font-weight:700;">$${totMkt.toLocaleString('es-MX',{maximumFractionDigits:0})}</td>
-                    <td><button class="btn-delete" style="padding:4px;" onclick="deleteStock(${idx})"><i class="fa-solid fa-trash"></i></button></td>
+                    <td><input type="number" step="0.01" value="${pm}" oninput="updateStock(${idx}, 'precioMercado', this.value)"></td>
+                    <td style="font-weight:700; padding-left:5px;">$${totMkt.toLocaleString('es-MX',{maximumFractionDigits:2})}</td>
+                    <td><button class="btn-delete" onclick="deleteStock(${idx})"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>`;
         });
     }
 
     function updateStock(idx, fld, val) {
         gbmStocks[idx][fld] = val; saveAll();
-        if(fld === 'ticker') fetchAllMarketPrices();
+        if(fld !== 'ticker') {
+            const row = document.getElementById('gbm-rows').children[idx];
+            if(row) {
+                const t = parseFloat(gbmStocks[idx].titulos) || 0;
+                const pm = parseFloat(gbmStocks[idx].precioMercado) || 0;
+                row.children[3].innerText = `$${(t * pm).toLocaleString('es-MX',{maximumFractionDigits:2})}`;
+            }
+        }
     }
-    function addStock() { gbmStocks.push({ticker:"Ticker.MX", titulos:0, costoPromedio:0, precioMercado:0}); saveAll(); renderGBM(); }
+    function addStock() { gbmStocks.push({ticker:"NUEVO", titulos:0, precioMercado:0}); saveAll(); renderGBM(); }
     function deleteStock(idx) { gbmStocks.splice(idx,1); saveAll(); renderGBM(); }
 
+    // --- PESTAÑA DIVIDENDOS: DETALLE POR MESES E ISR ---
     function renderDividendos() {
         const tbody = document.getElementById('dividend-rows');
-        const total = dividendosGBM.reduce((a,b)=>a+b, 0);
-        tbody.innerHTML = `
-            <tr>
-                <td><strong>GBM</strong></td>
-                <td><input type="number" value="${dividendosGBM[0]}" oninput="dividendosGBM[0]=parseFloat(this.value)||0;saveAll();"></td>
-                <td><input type="number" value="${dividendosGBM[1]}" oninput="dividendosGBM[1]=parseFloat(this.value)||0;saveAll();"></td>
-                <td><input type="number" value="${dividendosGBM[2]}" oninput="dividendosGBM[2]=parseFloat(this.value)||0;saveAll();"></td>
-                <td><input type="number" value="${dividendosGBM[3]}" oninput="dividendosGBM[3]=parseFloat(this.value)||0;saveAll();"></td>
-                <td style="font-weight:700;">$${total.toFixed(1)}</td>
-            </tr>`;
+        tbody.innerHTML = '';
+        let totalNetoAnual = 0;
+
+        dividendos.forEach((d, idx) => {
+            const bruto = parseFloat(d.bruto) || 0;
+            const isr = parseFloat(d.isr) || 0;
+            const neto = bruto - isr;
+            totalNetoAnual += neto;
+
+            tbody.innerHTML += `
+                <tr>
+                    <td>
+                        <select onchange="updateDividendo(${idx}, 'mes', this.value)">
+                            ${["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"].map(m => `<option value="${m}" ${d.mes===m?'selected':''}>${m}</option>`).join('')}
+                        </select>
+                    </td>
+                    <td><input type="text" value="${d.activo}" oninput="updateDividendo(${idx}, 'activo', this.value)"></td>
+                    <td><input type="number" step="0.01" value="${d.bruto}" oninput="updateDividendo(${idx}, 'bruto', this.value)"></td>
+                    <td><input type="number" step="0.01" value="${d.isr}" oninput="updateDividendo(${idx}, 'isr', this.value)"></td>
+                    <td style="font-weight:600; color:var(--success);">$${neto.toFixed(2)}</td>
+                    <td><button class="btn-delete" onclick="deleteDividendo(${idx})"><i class="fa-solid fa-trash"></i></button></td>
+                </tr>`;
+        });
+        tbody.innerHTML += `<tr style="background:#f7fafc; font-weight:bold;"><td colspan="4">Total Neto Recibido</td><td colspan="2" style="color:var(--success); font-size:0.85rem;">$${totalNetoAnual.toFixed(2)}</td></tr>`;
     }
 
+    function updateDividendo(idx, fld, val) {
+        dividendos[idx][fld] = val; saveAll();
+        if(fld === 'bruto' || fld === 'isr') renderDividendos();
+    }
+    function addDividendo() { dividendos.push({mes:"Enero", activo:"FMTY14", bruto:0, isr:0}); saveAll(); renderDividendos(); }
+    function deleteDividendo(idx) { dividendos.splice(idx,1); saveAll(); renderDividendos(); }
+
+    // --- CONTROL DE AVISOS PROXIMOS ---
+    function renderAvisos() {
+        const tbody = document.getElementById('avisos-rows');
+        tbody.innerHTML = '';
+        avisos.forEach((a, idx) => {
+            tbody.innerHTML += `
+                <tr>
+                    <td><input type="text" value="${a.activo}" oninput="updateAvisoData(${idx}, 'activo', this.value)"></td>
+                    <td><input type="date" value="${a.exdiv}" oninput="updateAvisoData(${idx}, 'exdiv', this.value)"></td>
+                    <td><input type="date" value="${a.pago}" oninput="updateAvisoData(${idx}, 'pago', this.value)"></td>
+                    <td><input type="number" step="0.0001" value="${a.monto}" oninput="updateAvisoData(${idx}, 'monto', this.value)"></td>
+                    <td><button class="btn-delete" onclick="deleteAviso(${idx})"><i class="fa-solid fa-trash"></i></button></td>
+                </tr>`;
+        });
+    }
+    function updateAvisoData(idx, fld, val) { avisos[idx][fld] = val; saveAll(); }
+    function addAviso() { avisos.push({activo:"FMTY14", exdiv:"", pago:"", monto:0}); saveAll(); renderAvisos(); }
+    function deleteAviso(idx) { avisos.splice(idx,1); saveAll(); renderAvisos(); }
+
+    // --- LISTA DE SEGUIMIENTO (RADAR) ---
+    function renderWatchlist() {
+        const tbody = document.getElementById('watchlist-rows');
+        tbody.innerHTML = '';
+        watchlist.forEach((w, idx) => {
+            const act = parseFloat(w.actual) || 0;
+            const obj = parseFloat(w.objetivo) || 0;
+            let badge = act <= obj ? `<span class="badge" style="background:var(--success); color:white;">¡COMPRAR!</span>` : `<span class="badge" style="background:var(--warning); color:black;">Esperar</span>`;
+            
+            tbody.innerHTML += `
+                <tr>
+                    <td><input type="text" value="${w.activo}" oninput="updateWatchlist(${idx}, 'activo', this.value)"></td>
+                    <td><input type="number" step="0.01" value="${w.actual}" oninput="updateWatchlist(${idx}, 'actual', this.value)"></td>
+                    <td><input type="number" step="0.01" value="${w.objetivo}" oninput="updateWatchlist(${idx}, 'objetivo', this.value)"></td>
+                    <td>${badge}</td>
+                    <td><button class="btn-delete" onclick="deleteWatchlist(${idx})"><i class="fa-solid fa-trash"></i></button></td>
+                </tr>`;
+        });
+    }
+    function updateWatchlist(idx, fld, val) { watchlist[idx][fld] = val; saveAll(); if(fld!=='activo') renderWatchlist(); }
+    function addWatchlistItem() { watchlist.push({activo:"Acción", actual:0, objetivo:0}); saveAll(); renderWatchlist(); }
+    function deleteWatchlist(idx) { watchlist.splice(idx,1); saveAll(); renderWatchlist(); }
+
+    // GRÁFICA DOUGHNUT CONSOLIDADA
     function renderChart(todosLosPilares) {
         const ctx = document.getElementById('allocationChart').getContext('2d');
-        const lbls = Object.keys(todosLosPilares).map(k => k.split(" ")[0]);
         if (allocationChart) allocationChart.destroy();
         allocationChart = new Chart(ctx, {
             type: 'doughnut',
-            data: { labels: lbls, datasets: [{ data: Object.values(todosLosPilares).map(p=>p.saldo), backgroundColor: Object.values(todosLosPilares).map(p=>p.color) }] },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 10, font: { size: 9 } } } } }
+            data: { 
+                labels: Object.keys(todosLosPilares), 
+                datasets: [{ data: Object.values(todosLosPilares).map(p=>p.saldo), backgroundColor: Object.values(todosLosPilares).map(p=>p.color) }] 
+            },
+            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 8, font: { size: 9 } } } } }
         });
     }
 
