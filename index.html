@@ -2,609 +2,447 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Control de Inversiones - 5 Pilares</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    
-    <style>
-        :root {
-            --bg-primary: #f4f6f9;
-            --card-bg: #ffffff;
-            --text-main: #2d3748;
-            --text-muted: #718096;
-            --accent: #2b6cb0;
-            --accent-hover: #1a365d;
-            --border-color: #e2e8f0;
-            --success: #48bb78;
-            --danger: #f56565;
-            --warning: #ecc94b;
-            --quote-bg: #ebf8ff;
-            --quote-border: #3182ce;
-        }
-
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: var(--bg-primary); color: var(--text-main); padding: 8px; -webkit-text-size-adjust: 100%; }
-        .container { max-width: 1200px; margin: 0 auto; }
-        
-        header { margin-bottom: 12px; text-align: center; padding-top: 5px; }
-        header h1 { color: var(--accent-hover); font-size: 1.4rem; margin-bottom: 2px; }
-        header p { color: var(--text-muted); font-size: 0.8rem; }
-
-        .motivation-banner {
-            background: var(--quote-bg);
-            border-left: 4px solid var(--quote-border);
-            padding: 10px 14px;
-            border-radius: 8px;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .motivation-banner p {
-            font-size: 0.8rem;
-            font-style: italic;
-            color: #2b6cb0;
-            line-height: 1.3;
-            font-weight: 500;
-        }
-        .motivation-banner i { color: var(--quote-border); font-size: 1rem; }
-
-        .tabs { display: flex; gap: 4px; margin-bottom: 12px; background: #e2e8f0; padding: 4px; border-radius: 8px; overflow-x: auto; }
-        .tab-btn { 
-            flex: 1; background: transparent; border: none; padding: 8px 4px; min-width: 75px;
-            font-weight: 600; cursor: pointer; border-radius: 6px; color: var(--text-main);
-            transition: all 0.2s ease; display: flex; align-items: center; justify-content: center; gap: 4px; font-size: 0.75rem; white-space: nowrap;
-        }
-        .tab-btn.active { background: var(--card-bg); color: var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-        
-        .card { background: var(--card-bg); border-radius: 12px; padding: 12px; box-shadow: 0 2px 4px rgba(0,0,0,0.02); border: 1px solid var(--border-color); margin-bottom: 12px; }
-        .card h2 { font-size: 0.95rem; color: var(--accent-hover); margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 6px; }
-
-        .table-responsive { overflow-x: auto; width: 100%; width: -webkit-fill-available; margin-bottom: 5px; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.75rem; }
-        th, td { padding: 6px 4px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
-        th { background-color: #f7fafc; color: var(--text-main); font-weight: 600; white-space: nowrap; }
-        
-        input, select { 
-            width: 100%; padding: 5px; border: 1px solid var(--border-color); border-radius: 6px; 
-            color: var(--text-main); font-size: 0.75rem; background-color: #f8fafc; -webkit-appearance: none;
-        }
-        input:focus, select:focus { background-color: #ffffff; border-color: var(--accent); outline: none; }
-        
-        .col-ticker { width: 18%; }
-        .col-tits { width: 18%; }
-        .col-price { width: 19%; }
-        .col-total { width: 18%; font-weight: bold; }
-        .col-ganancia { width: 22%; }
-        .col-action { width: 5%; }
-
-        .input-tits { min-width: 55px; font-weight: 600; text-align: center; }
-        .input-price { min-width: 65px; }
-
-        .badge { padding: 2px 4px; border-radius: 4px; font-weight: bold; font-size: 0.68rem; display: inline-block; }
-        .chart-container { position: relative; margin: auto; height: 180px; width: 100%; }
-        .btn-add { background: var(--success); color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.75rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 5px; }
-        .btn-update { background: var(--accent); color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.75rem; display: inline-flex; align-items: center; gap: 4px; margin-bottom: 8px; }
-        .btn-delete { background: var(--danger); color: white; border: none; padding: 5px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
-        
-        .grid-2 { display: grid; grid-template-columns: 1fr; gap: 12px; }
-        .input-inline { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 0.8rem; }
-        .input-inline input { max-width: 140px; }
-        @media (min-width: 768px) { .grid-2 { grid-template-columns: 1fr 1fr; } .chart-container { height: 220px; } }
-        
-        .up-val { color: #2f855a; font-weight: bold; }
-        .down-val { color: #c53030; font-weight: bold; }
-        .sync-flash { animation: flash 0.8s ease-out; }
-        @keyframes flash { 0% { background-color: #ebf8ff; } 100% { background-color: transparent; } }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Ruta Estratégica - Control Patrimonial</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800 font-sans antialiased pb-12">
 
-<div class="container">
-    <header>
-        <h1><i class="fa-solid fa-wallet"></i> Mi Ruta Estratégica</h1>
-        <p>Control Patrimonial Adaptable de 5 Pilares</p>
+    <header class="bg-slate-900 text-white p-5 shadow-md text-center">
+        <h1 class="text-2xl font-bold flex items-center justify-center gap-2">
+            <i class="fa-solid fa-wallet text-amber-400"></i> Mi Ruta Estratégica
+        </h1>
+        <p class="text-xs text-slate-400 mt-1">Control Patrimonial Adaptable de 5 Pilares</p>
+        <div class="bg-slate-800 text-emerald-400 text-xs py-1.5 px-3 rounded-full inline-block mt-3 font-semibold border border-slate-700">
+            <i class="fa-solid fa-bolt"></i> "El éxito financiero es la disciplina constante con la que construyes tu presente."
+        </div>
     </header>
 
-    <div class="motivation-banner" id="motivation-box">
-        <i class="fa-solid fa-bolt-lightning"></i>
-        <p id="motivation-text">Cargando tu frase de la semana...</p>
-    </div>
+    <nav class="flex justify-around bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+        <button onclick="cambiarPestaña('general')" id="btn-general" class="flex-1 py-3.5 text-center font-medium text-sm border-b-2 border-blue-600 text-blue-600 flex flex-col items-center gap-1">
+            <i class="fa-solid fa-chart-pie text-base"></i> General
+        </button>
+        <button onclick="cambiarPestaña('gbm')" id="btn-gbm" class="flex-1 py-3.5 text-center font-medium text-sm border-b-2 border-transparent text-gray-500 flex flex-col items-center gap-1">
+            <i class="fa-solid fa-chart-line text-base"></i> GBM (En Vivo)
+        </button>
+        <button onclick="cambiarPestaña('divs')" id="btn-divs" class="flex-1 py-3.5 text-center font-medium text-sm border-b-2 border-transparent text-gray-500 flex flex-col items-center gap-1">
+            <i class="fa-solid fa-hand-holding-dollar text-base"></i> Divs
+        </button>
+        <button onclick="cambiarPestaña('radar')" id="btn-radar" class="flex-1 py-3.5 text-center font-medium text-sm border-b-2 border-transparent text-gray-500 flex flex-col items-center gap-1">
+            <i class="fa-solid fa-eye text-base"></i> Radar
+        </button>
+    </nav>
 
-    <div class="tabs">
-        <button class="tab-btn active" onclick="switchTab('dashboard')"><i class="fa-solid fa-chart-pie"></i> General</button>
-        <button class="tab-btn" onclick="switchTab('gbm')"><i class="fa-solid fa-chart-line"></i> GBM</button>
-        <button class="tab-btn" onclick="switchTab('dividendos')"><i class="fa-solid fa-hand-holding-dollar"></i> Divs</button>
-        <button class="tab-btn" onclick="switchTab('seguimiento')"><i class="fa-solid fa-eye"></i> Radar</button>
-    </div>
+    <main class="max-w-md mx-auto p-4 space-y-5">
 
-    <div id="dashboard" class="tab-content active">
-        <div class="grid-2">
-            <div>
-                <div class="card">
-                    <h2>Distribución Real por Pilar</h2>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th>Pilar</th><th>Monto ($)</th><th>%</th></tr></thead>
-                            <tbody id="dashboard-rows"></tbody>
-                        </table>
-                    </div>
+        <section id="pestaña-general" class="space-y-4">
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <h2 class="text-base font-bold text-gray-900 mb-4 flex items-center gap-2">
+                    <i class="fa-solid fa-list-check text-blue-500"></i> Distribución Real por Pilar
+                </h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead>
+                            <tr class="border-b border-gray-100 text-gray-400 font-medium">
+                                <th class="pb-2">Pilar</th>
+                                <th class="pb-2 text-right">Monto ($)</th>
+                                <th class="pb-2 text-right">%</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-pilares" class="divide-y divide-gray-50">
+                            </tbody>
+                    </table>
                 </div>
-                <div class="card">
-                    <h2>Renta Fija: Sofipos (Cálculo Diario)</h2>
-                    <div class="table-responsive">
-                        <table>
-                            <thead><tr><th>Cuenta</th><th>Monto ($)</th><th>Tasa</th><th>Acción</th></tr></thead>
-                            <tbody id="sofipo-rows"></tbody>
-                        </table>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <h2 class="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-vault text-emerald-500"></i> Renta Fija: Sofipos (Cálculo Diario)
+                </h2>
+                <div class="space-y-3" id="lista-sofipos">
                     </div>
-                    <button class="btn-add" onclick="addSofipo()"><i class="fa-solid fa-plus"></i> Añadir Cuenta</button>
+                <button onclick="añadirSofipo()" class="w-full mt-4 bg-emerald-50 text-emerald-600 font-semibold text-sm py-2.5 rounded-xl border border-emerald-200 hover:bg-emerald-100 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Añadir Cuenta
+                </button>
+            </div>
+        </section>
+
+        <section id="pestaña-gbm" class="hidden space-y-4">
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                        <i class="fa-solid fa-money-bill-trend-up text-blue-600"></i> Renta Variable (Precios Yahoo)
+                    </h2>
+                    <button onclick="actualizarPreciosTodo()" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-xs font-semibold shadow-sm hover:bg-blue-700 transition flex items-center gap-1.5">
+                        <i class="fa-solid fa-rotate"></i> Actualizar Online
+                    </button>
                 </div>
-            </div>
-            <div class="card">
-                <h2>Asignación Visual</h2>
-                <div class="chart-container"><canvas id="allocationChart"></canvas></div>
-            </div>
-        </div>
-    </div>
-
-    <div id="gbm" class="tab-content">
-        <div class="card">
-            <h2>Renta Variable (Precios Automatizados vía API)</h2>
-            <button class="btn-update" id="btn-sync-prices" onclick="fetchAllMarketPrices()"><i class="fa-solid fa-rotate"></i> Actualizar Precios Online</button>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th class="col-ticker">Ticker</th>
-                            <th class="col-tits">Títs</th>
-                            <th class="col-price">Precio Prom ($)</th>
-                            <th class="col-price">Precio Mkt ($)</th>
-                            <th class="col-total">Total Mkt</th>
-                            <th class="col-ganancia">Gan/Per</th>
-                            <th class="col-action"></th>
-                        </tr>
-                    </thead>
-                    <tbody id="gbm-rows"></tbody>
-                </table>
-            </div>
-            <button class="btn-add" onclick="addStock()"><i class="fa-solid fa-plus"></i> Agregar Activo a GBM</button>
-        </div>
-
-        <div class="card">
-            <h2><i class="fa-solid fa-money-bill-wave" style="color:var(--success);"></i> Efectivo en GBM</h2>
-            <div class="input-inline">
-                <label style="font-weight:600;">Efectivo Disponible:</label>
-                <input type="number" id="gbm-cash-input" step="0.01" placeholder="0.00" oninput="updateGbmCash(this.value)">
-                <span style="font-weight:bold; color:var(--accent);" id="gbm-total-consolidado-label"></span>
-            </div>
-        </div>
-    </div>
-
-    <div id="dividendos" class="tab-content">
-        <div class="card">
-            <h2><i class="fa-solid fa-bullhorn" style="color:var(--accent);"></i> Avisos y Próximos Pagos</h2>
-            <div class="table-responsive">
-                <table>
-                    <thead><tr><th>Activo</th><th>Fecha Ex-Div</th><th>Fecha Pago</th><th>Monto por Tít.</th><th></th></tr></thead>
-                    <tbody id="avisos-rows"></tbody>
-                </table>
-            </div>
-            <button class="btn-add" onclick="addAviso()"><i class="fa-solid fa-plus"></i> Añadir Aviso de Pago</button>
-        </div>
-
-        <div class="card">
-            <h2><i class="fa-solid fa-receipt" style="color:var(--success);"></i> Desglose de Dividendos Cobrados</h2>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width:75px;">Mes</th>
-                            <th>Activo</th>
-                            <th>Bruto ($)</th>
-                            <th>ISR ($)</th>
-                            <th>Neto ($)</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="dividend-rows"></tbody>
-                </table>
-            </div>
-            <button class="btn-add" onclick="addDividendo()"><i class="fa-solid fa-plus"></i> Registrar Cobro</button>
-        </div>
-    </div>
-
-    <div id="seguimiento" class="tab-content">
-        <div class="card">
-            <h2><i class="fa-solid fa-binoculars"></i> Lista de Seguimiento (Oportunidades de Compra)</h2>
-            <div class="table-responsive">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Activo</th>
-                            <th>Precio Actual ($)</th>
-                            <th>Precio Objetivo ($)</th>
-                            <th>Estado</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody id="watchlist-rows"></tbody>
-                </table>
-            </div>
-            <button class="btn-add" onclick="addWatchlistItem()"><i class="fa-solid fa-plus"></i> Agregar al Radar</button>
-        </div>
-    </div>
-</div>
-
-<script>
-    const frasesSemanales = [
-        "El éxito financiero no se trata de adivinar el futuro, sino de la disciplina constante con la que construyes tu presente.",
-        "Cada peso invertido en tus pilares es un bloque de piedra en la fortaleza de tu libertad y el bienestar de tu familia.",
-        "Los mercados suben y bajan, pero una estrategia bien estructurada y la constancia semanal siempre ganan al final del camino.",
-        "No busques la riqueza rápida; busca la solidez inquebrantable. Tu 'Ruta Estratégica' es el mapa hacia tu éxito.",
-        "El inversor paciente sabe que las grandes fortunas no se hacen de la noche a la mañana, sino con consistencia y visión a largo plazo."
-    ];
-
-    function setMotivationQuote() {
-        const d = new Date();
-        const janOne = new Date(d.getFullYear(), 0, 1);
-        const weekNum = Math.ceil((((d - janOne) / 86400000) + janOne.getDay() + 1) / 7);
-        const index = weekNum % frasesSemanales.length;
-        document.getElementById('motivation-text').innerText = frasesSemanales[index];
-    }
-
-    const defaultSofipos = [
-        { nombre: "Nu México", monto: 25153.91, tasa: 14.25 },
-        { nombre: "DiDi Cuenta", monto: 5472.37, tasa: 14.00 },
-        { nombre: "Finsus", monto: 4371.98, tasa: 15.01 }
-    ];
-
-    const defaultPilaresEstaticos = {
-        "GBM (Acciones y Fibras)": { saldo: 434.00, color: "#2b6cb0" },
-        "Yo te presto (P2P)": { saldo: 15485.46, color: "#ed8936" },
-        "Bitso (Cripto)": { saldo: 2800.96, color: "#ecc94b" }
-    };
-
-    const defaultStocks = [
-        { ticker: "FMTY14.MX", titulos: 36, precioPromedio: 14.36, precioMercado: 14.06 },
-        { ticker: "WALMEX.MX", titulos: 157, precioPromedio: 54.54, precioMercado: 50.29 },
-        { ticker: "FEMSAUBD.MX", titulos: 28, precioPromedio: 172.73, precioMercado: 219.31 },
-        { ticker: "ALSEA.MX", titulos: 60, precioPromedio: 48.12, precioMercado: 46.78 }
-    ];
-
-    const defaultDividendos = [
-        { mes: "Febrero", activo: "FMTY14", bruto: 100.00, isr: 30.00 }
-    ];
-
-    const defaultAvisos = [
-        { activo: "FMTY14", exdiv: "2026-06-25", pago: "2026-06-30", monto: 0.085 }
-    ];
-
-    const defaultWatchlist = [
-        { activo: "AC.MX", actual: 165.00, objetivo: 155.00 }
-    ];
-
-    let sofipos = JSON.parse(localStorage.getItem('v8_sofipos')) || defaultSofipos;
-    let pilaresEstaticos = JSON.parse(localStorage.getItem('v8_pilares')) || defaultPilaresEstaticos;
-    let gbmStocks = JSON.parse(localStorage.getItem('v8_stocks')) || defaultStocks;
-    let gbmCash = parseFloat(localStorage.getItem('v8_gbmcash')) || 0;
-    let dividendos = JSON.parse(localStorage.getItem('v8_dividendos')) || defaultDividendos;
-    let avisos = JSON.parse(localStorage.getItem('v8_avisos')) || defaultAvisos;
-    let watchlist = JSON.parse(localStorage.getItem('v8_watchlist')) || defaultWatchlist;
-    let allocationChart;
-
-    function saveAll() {
-        localStorage.setItem('v8_sofipos', JSON.stringify(sofipos));
-        localStorage.setItem('v8_pilares', JSON.stringify(pilaresEstaticos));
-        localStorage.setItem('v8_stocks', JSON.stringify(gbmStocks));
-        localStorage.setItem('v8_gbmcash', gbmCash);
-        localStorage.setItem('v8_dividendos', JSON.stringify(dividendos));
-        localStorage.setItem('v8_avisos', JSON.stringify(avisos));
-        localStorage.setItem('v8_watchlist', JSON.stringify(watchlist));
-    }
-
-    function switchTab(tabId) {
-        document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-        const currentBtn = document.querySelector(`[onclick="switchTab('${tabId}')"]`);
-        if(currentBtn) currentBtn.classList.add('active');
-        document.getElementById(tabId).classList.add('active');
-        
-        if(tabId === 'dashboard') updateDashboard();
-        if(tabId === 'gbm') { renderGBM(); fetchAllMarketPrices(); }
-        if(tabId === 'dividendos') { renderDividendos(); renderAvisos(); }
-        if(tabId === 'seguimiento') renderWatchlist();
-    }
-
-    function getGbmTotalPatrimonial() {
-        let totalTitulosMkt = gbmStocks.reduce((acc, c) => acc + ((parseFloat(c.titulos) || 0) * (parseFloat(c.precioMercado) || 0)), 0);
-        return totalTitulosMkt + gbmCash;
-    }
-
-    // --- NUEVA CONEXIÓN REPARADA CON PROXY ANTI-CORS ---
-    async function fetchAllMarketPrices() {
-        const btn = document.getElementById('btn-sync-prices');
-        if(btn) btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Sincronizando...`;
-
-        for (let i = 0; i < gbmStocks.length; i++) {
-            const tk = gbmStocks[i].ticker.trim().toUpperCase();
-            if(!tk || tk === "NUEVO.MX") continue;
-            
-            try {
-                // Usamos el proxy público allorigins para saltar el bloqueo de CORS de Yahoo/Stooq
-                const urlTarget = encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${tk}`);
-                const response = await fetch(`https://api.allorigins.win/get?url=${urlTarget}`);
                 
-                if (response.ok) {
-                    const wrapper = await response.json();
-                    const data = JSON.parse(wrapper.contents);
-                    
-                    if (data && data.chart && data.chart.result && data.chart.result[0]) {
-                        const meta = data.chart.result[0].meta;
-                        const onlinePrice = meta.regularMarketPrice;
-                        
-                        if (onlinePrice && !isNaN(onlinePrice) && onlinePrice > 0) {
-                            gbmStocks[i].precioMercado = parseFloat(onlinePrice.toFixed(2));
-                            
-                            // Forzar actualización inmediata en el recuadro visual de la fila
-                            const inputMkt = document.getElementById(`price-mkt-input-${i}`);
-                            if (inputMkt) {
-                                inputMkt.value = onlinePrice.toFixed(2);
-                                inputMkt.classList.add('sync-flash');
-                                setTimeout(() => inputMkt.classList.remove('sync-flash'), 800);
-                            }
-                            liveUpdateStock(i, 'precioMercado', onlinePrice);
-                        }
-                    }
-                }
-            } catch (e) {
-                console.log("Error de conexión para: " + tk, e);
-            }
-        }
-        saveAll();
-        if(btn) btn.innerHTML = `<i class="fa-solid fa-rotate"></i> Actualizar Precios Online`;
-    }
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead>
+                            <tr class="text-gray-400 font-medium border-b border-gray-100 text-xs">
+                                <th class="pb-2">Ticker</th>
+                                <th class="pb-2 text-center">Títs</th>
+                                <th class="pb-2 text-right">Prom ($)</th>
+                                <th class="pb-2 text-right">Mkt ($)</th>
+                                <th class="pb-2 text-right">Gan/Per</th>
+                                <th class="pb-2 text-center"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-gbm" class="divide-y divide-gray-50 font-medium">
+                            </tbody>
+                    </table>
+                </div>
 
-    function updateDashboard() {
-        let totalSofipos = sofipos.reduce((acc, c) => acc + (parseFloat(c.monto) || 0), 0);
-        let totalGBMConsolidado = getGbmTotalPatrimonial();
-        
-        pilaresEstaticos["GBM (Acciones y Fibras)"].saldo = totalGBMConsolidado;
+                <button onclick="añadirActivoGBM()" class="w-full mt-4 bg-blue-50 text-blue-600 font-semibold text-sm py-2.5 rounded-xl border border-blue-200 hover:bg-blue-100 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Agregar Activo a GBM
+                </button>
+            </div>
 
-        let todosLosPilares = {
-            "GBM (Acciones y Fibras)": { saldo: totalGBMConsolidado, color: "#2b6cb0" },
-            "Sofipos": { saldo: totalSofipos, color: "#48bb78" },
-            "Yo te presto (P2P)": { saldo: parseFloat(pilaresEstaticos["Yo te presto (P2P)"].saldo) || 0, color: "#ed8936" },
-            "Bitso (Cripto)": { saldo: parseFloat(pilaresEstaticos["Bitso (Cripto)"].saldo) || 0, color: "#ecc94b" }
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex justify-between items-center">
+                <div>
+                    <p class="text-sm font-bold text-gray-900 flex items-center gap-1.5">
+                        <i class="fa-solid fa-money-bill-1 text-emerald-500"></i> Efectivo en GBM
+                    </p>
+                    <p class="text-xs text-gray-400 mt-0.5">Smart Cash o disponible para compra</p>
+                </div>
+                <div class="text-right">
+                    <input type="number" id="efectivo-gbm-input" onchange="guardarEfectivoGBM(this.value)" class="w-24 text-right border border-gray-200 rounded-lg p-1 text-sm font-semibold focus:outline-blue-500" value="0">
+                    <p class="text-xs font-bold text-blue-600 mt-1" id="total-pilar-gbm">Total: $0.00</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="pestaña-divs" class="hidden space-y-4">
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <h2 class="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-bullhorn text-purple-500"></i> Avisos y Próximos Pagos
+                </h2>
+                <div id="lista-avisos-divs" class="space-y-3">
+                    </div>
+                <button onclick="añadirAvisoDiv()" class="w-full mt-4 bg-purple-50 text-purple-600 font-semibold text-sm py-2.5 rounded-xl border border-purple-200 hover:bg-purple-100 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Añadir Aviso de Pago
+                </button>
+            </div>
+
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <h2 class="text-base font-bold text-gray-900 mb-3 flex items-center gap-2">
+                    <i class="fa-solid fa-receipt text-indigo-500"></i> Desglose de Dividendos Cobrados
+                </h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead>
+                            <tr class="text-gray-400 text-xs font-medium border-b border-gray-100">
+                                <th class="pb-2">Mes</th>
+                                <th class="pb-2">Activo</th>
+                                <th class="pb-2 text-right">Bruto ($)</th>
+                                <th class="pb-2 text-right">ISR ($)</th>
+                                <th class="pb-2 text-right">Neto ($)</th>
+                                <th class="pb-2"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-cobros-divs" class="divide-y divide-gray-50">
+                            </tbody>
+                    </table>
+                </div>
+                <div class="mt-4 flex justify-between items-center pt-2 border-t border-gray-100">
+                    <span class="text-sm font-bold text-gray-900">Total Neto Recibido</span>
+                    <span id="total-neto-dividendos" class="text-sm font-bold text-emerald-600">$0.00</span>
+                </div>
+                <button onclick="añadirCobroDiv()" class="w-full mt-4 bg-indigo-50 text-indigo-600 font-semibold text-sm py-2.5 rounded-xl border border-indigo-200 hover:bg-indigo-100 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Registrar Cobro
+                </button>
+            </div>
+        </section>
+
+        <section id="pestaña-radar" class="hidden space-y-4">
+            <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-base font-bold text-gray-900 flex items-center gap-2">
+                        <i class="fa-solid fa-binoculars text-amber-500"></i> Lista de Seguimiento (Oportunidades)
+                    </h2>
+                    <button onclick="actualizarPreciosRadar()" class="bg-amber-600 text-white px-2.5 py-1.5 rounded-lg text-xs font-semibold shadow-sm hover:bg-amber-700 transition flex items-center gap-1">
+                        <i class="fa-solid fa-square-poll-vertical"></i> Evaluar Radar
+                    </button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-sm text-left">
+                        <thead>
+                            <tr class="text-gray-400 text-xs font-medium border-b border-gray-100">
+                                <th class="pb-2">Ticker</th>
+                                <th class="pb-2 text-right">Precio Actual</th>
+                                <th class="pb-2 text-right">Precio Obj.</th>
+                                <th class="pb-2 text-center">Estado</th>
+                                <th class="pb-2"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="tabla-radar" class="divide-y divide-gray-50">
+                            </tbody>
+                    </table>
+                </div>
+                <button onclick="añadirRadar()" class="w-full mt-4 bg-amber-50 text-amber-600 font-semibold text-sm py-2.5 rounded-xl border border-amber-200 hover:bg-amber-100 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Agregar al Radar
+                </button>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // --- BASE DE DATOS LOCAL (ESTRUCTURA DE 5 PILARES) ---
+        let datosApp = {
+            sofipos: [
+                { cuenta: 'Nu México', monto: 25153.91, tasa: 14.25 },
+                { cuenta: 'DiDi Cuenta', monto: 5472.37, tasa: 14.00 },
+                { cuenta: 'Finsus', monto: 4371.98, tasa: 15.01 }
+            ],
+            yoPresto: 15485.46,
+            bitso: 2800.96,
+            efectivoGBM: 0,
+            gbm: [
+                { ticker: 'FMTY14.MX', titulos: 36, precioProm: 14.36, precioMkt: 14.06 },
+                { ticker: 'WALMEX.MX', titulos: 157, precioProm: 54.54, precioMkt: 50.29 },
+                { ticker: 'FEMSAUBD.MX', titulos: 28, precioProm: 172.73, precioMkt: 219.31 },
+                { ticker: 'ALSEA.MX', titulos: 60, precioProm: 48.12, precioMkt: 46.78 }
+            ],
+            avisosDividendo: [
+                { ticker: 'FMTY14.MX', exDiv: '2026-06-25', pago: '2026-06-30', montoPorTit: 0.085 }
+            ],
+            cobrosDividendo: [
+                { mes: 'Junio', ticker: 'FMTY14.MX', bruto: 4.00, isr: 1.00 }
+            ],
+            radar: [
+                { ticker: 'AC.MX', precioActual: 0, precioObjetivo: 165.00 }
+            ]
         };
 
-        let totalPatrimonio = Object.values(todosLosPilares).reduce((a, b) => a + b.saldo, 0);
-        const tbodyDashboard = document.getElementById('dashboard-rows');
-        tbodyDashboard.innerHTML = '';
-
-        Object.keys(todosLosPilares).forEach(pilar => {
-            const data = todosLosPilares[pilar];
-            const pct = totalPatrimonio > 0 ? ((data.saldo / totalPatrimonio) * 100).toFixed(1) : 0;
-            
-            let displayField = pilar === "Sofipos" || pilar === "GBM (Acciones y Fibras)" ? 
-                `<strong>$${data.saldo.toLocaleString('es-MX',{minimumFractionDigits:2})}</strong>` :
-                `<input type="number" step="0.01" value="${data.saldo}" oninput="updatePilarValue('${pilar}', this.value)">`;
-
-            tbodyDashboard.innerHTML += `<tr><td><strong>${pilar}</strong></td><td>${displayField}</td><td><span class="badge" style="background:${data.color}22; color:${data.color};">${pct}%</span></td></tr>`;
-        });
-
-        tbodyDashboard.innerHTML += `<tr style="background:#e2e8f0; font-weight:bold;"><td>Total Consolidado</td><td colspan="2">$${totalPatrimonio.toLocaleString('es-MX',{minimumFractionDigits:2})} MXN</td></tr>`;
-        renderSofiposTable();
-        renderChart(todosLosPilares);
-    }
-
-    function updatePilarValue(pilar, val) {
-        if(pilaresEstaticos[pilar]) pilaresEstaticos[pilar].saldo = parseFloat(val) || 0;
-        saveAll();
-        let totalSofipos = sofipos.reduce((acc, c) => acc + (parseFloat(c.monto) || 0), 0);
-        let totalGBMConsolidado = getGbmTotalPatrimonial();
-        renderChart({
-            "GBM (Acciones y Fibras)": { saldo: totalGBMConsolidado, color: "#2b6cb0" },
-            "Sofipos": { saldo: totalSofipos, color: "#48bb78" },
-            "Yo te presto (P2P)": { saldo: parseFloat(pilaresEstaticos["Yo te presto (P2P)"].saldo) || 0, color: "#ed8936" },
-            "Bitso (Cripto)": { saldo: parseFloat(pilaresEstaticos["Bitso (Cripto)"].saldo) || 0, color: "#ecc94b" }
-        });
-    }
-
-    function renderSofiposTable() {
-        const tbody = document.getElementById('sofipo-rows');
-        tbody.innerHTML = '';
-        sofipos.forEach((s, idx) => {
-            tbody.innerHTML += `
-                <tr>
-                    <td><input type="text" value="${s.nombre}" oninput="updateSofipo(${idx}, 'nombre', this.value)"></td>
-                    <td><input type="number" step="0.01" value="${s.monto}" oninput="updateSofipo(${idx}, 'monto', this.value)"></td>
-                    <td><input type="number" step="0.01" value="${s.tasa}" style="min-width:45px;" oninput="updateSofipo(${idx}, 'tasa', this.value)"></td>
-                    <td><button class="btn-delete" onclick="deleteSofipo(${idx})"><i class="fa-solid fa-trash"></i></button></td>
-                </tr>`;
-        });
-    }
-
-    function updateSofipo(idx, fld, val) { sofipos[idx][fld] = val; saveAll(); }
-    function addSofipo() { sofipos.push({nombre:"Nueva", monto:0, tasa:14}); saveAll(); updateDashboard(); }
-    function deleteSofipo(idx) { sofipos.splice(idx,1); saveAll(); updateDashboard(); }
-
-    function renderGBM() {
-        const tbody = document.getElementById('gbm-rows');
-        tbody.innerHTML = '';
-        let totalTitulosMkt = 0;
-
-        gbmStocks.forEach((stk, idx) => {
-            const t = parseFloat(stk.titulos) || 0;
-            const pp = parseFloat(stk.precioPromedio) || 0;
-            const pm = parseFloat(stk.precioMercado) || 0;
-            
-            const totalMkt = t * pm;
-            totalTitulosMkt += totalMkt;
-
-            const gananciaDinero = totalMkt - (t * pp);
-            const gananciaPct = (t * pp) > 0 ? (gananciaDinero / (t * pp)) * 100 : 0;
-
-            let perfClass = gananciaDinero >= 0 ? "up-val" : "down-val";
-            let sign = gananciaDinero >= 0 ? "+" : "";
-
-            tbody.innerHTML += `
-                <tr id="gbm-row-${idx}">
-                    <td class="col-ticker"><input type="text" value="${stk.ticker}" oninput="liveUpdateStock(${idx}, 'ticker', this.value)"></td>
-                    <td class="col-tits"><input type="number" class="input-tits" value="${stk.titulos}" oninput="liveUpdateStock(${idx}, 'titulos', this.value)"></td>
-                    <td class="col-price"><input type="number" class="input-price" step="0.01" value="${pp}" oninput="liveUpdateStock(${idx}, 'precioPromedio', this.value)"></td>
-                    <td class="col-price"><input type="number" class="input-price" step="0.01" id="price-mkt-input-${idx}" value="${pm}" oninput="liveUpdateStock(${idx}, 'precioMercado', this.value)"></td>
-                    <td class="col-total" id="total-mkt-${idx}">$${totalMkt.toFixed(2)}</td>
-                    <td class="col-ganancia ${perfClass}" id="gan-per-${idx}">${sign}$${gananciaDinero.toFixed(2)}<br><small>${sign}${gananciaPct.toFixed(1)}%</small></td>
-                    <td class="col-action"><button class="btn-delete" onclick="deleteStock(${idx})"><i class="fa-solid fa-trash"></i></button></td>
-                </tr>`;
-        });
-
-        document.getElementById('gbm-cash-input').value = gbmCash;
-        updateGbmLabels(totalTitulosMkt);
-    }
-
-    function liveUpdateStock(idx, fld, val) {
-        if(fld === 'titulos' || fld === 'precioPromedio' || fld === 'precioMercado') {
-            gbmStocks[idx][fld] = parseFloat(val) || 0;
-        } else {
-            gbmStocks[idx][fld] = val;
+        // Guardado / Recuperación en LocalStorage del celular
+        function guardarDatos() {
+            localStorage.setItem('MiRutaEstrategica_Data', JSON.stringify(datosApp));
+            calcularYRenderizarTodo();
         }
-        saveAll();
 
-        const row = document.getElementById(`gbm-row-${idx}`);
-        if (!row) return;
+        function cargarDatos() {
+            const locales = localStorage.getItem('MiRutaEstrategica_Data');
+            if (locales) {
+                datosApp = JSON.parse(locales);
+            }
+            document.getElementById('efectivo-gbm-input').value = datosApp.efectivoGBM || 0;
+            calcularYRenderizarTodo();
+        }
 
-        const t = parseFloat(row.querySelector('.input-tits').value) || 0;
-        const inputsPrecio = row.querySelectorAll('.input-price');
-        const pp = parseFloat(inputsPrecio[0].value) || 0;
-        const pm = parseFloat(inputsPrecio[1].value) || 0;
+        // --- SISTEMA DE PESTAÑAS ---
+        function cambiarPestaña(pestañaId) {
+            ['general', 'gbm', 'divs', 'radar'].forEach(id => {
+                document.getElementById(`pestaña-${id}`).classList.add('hidden');
+                document.getElementById(`btn-${id}`).classList.remove('border-blue-600', 'text-blue-600');
+                document.getElementById(`btn-${id}`).classList.add('border-transparent', 'text-gray-500');
+            });
+            document.getElementById(`pestaña-${pestañaId}`).classList.remove('hidden');
+            document.getElementById(`btn-${pestañaId}`).classList.add('border-blue-600', 'text-blue-600');
+            document.getElementById(`btn-${pestañaId}`).classList.remove('border-transparent', 'text-gray-500');
+        }
 
-        const totalMkt = t * pm;
-        const gananciaDinero = totalMkt - (t * pp);
-        const gananciaPct = (t * pp) > 0 ? (gananciaDinero / (t * pp)) * 100 : 0;
-
-        let perfClass = gananciaDinero >= 0 ? "up-val" : "down-val";
-        let sign = gananciaDinero >= 0 ? "+" : "";
-
-        document.getElementById(`total-mkt-${idx}`).innerText = `$${totalMkt.toFixed(2)}`;
-        const ganCell = document.getElementById(`gan-per-${idx}`);
-        ganCell.className = `col-ganancia ${perfClass}`;
-        ganCell.innerHTML = `${sign}$${gananciaDinero.toFixed(2)}<br><small>${sign}${gananciaPct.toFixed(1)}%</small>`;
-
-        let totalGlobalMkt = gbmStocks.reduce((acc, c) => acc + ((parseFloat(c.titulos) || 0) * (parseFloat(c.precioMercado) || 0)), 0);
-        updateGbmLabels(totalGlobalMkt);
-    }
-
-    function updateGbmCash(val) {
-        gbmCash = parseFloat(val) || 0;
-        saveAll();
-        let totalTitulosMkt = gbmStocks.reduce((acc, c) => acc + ((parseFloat(c.titulos) || 0) * (parseFloat(c.precioMercado) || 0)), 0);
-        updateGbmLabels(totalTitulosMkt);
-    }
-
-    function updateGbmLabels(totalTitulosMkt) {
-        let consolidado = totalTitulosMkt + gbmCash;
-        document.getElementById('gbm-total-consolidado-label').innerText = `Total Pilar GBM: $${consolidado.toLocaleString('es-MX', {minimumFractionDigits:2})} MXN`;
-    }
-
-    function addStock() { gbmStocks.push({ticker:"NUEVO.MX", titulos:0, precioPromedio:0, precioMercado:0}); saveAll(); renderGBM(); }
-    function deleteStock(idx) { gbmStocks.splice(idx,1); saveAll(); renderGBM(); }
-
-    function renderDividendos() {
-        const tbody = document.getElementById('dividend-rows');
-        tbody.innerHTML = '';
-        let totalNetoAnual = 0;
-
-        dividendos.forEach((d, idx) => {
-            const bruto = parseFloat(d.bruto) || 0;
-            const isr = parseFloat(d.isr) || 0;
-            const neto = bruto - isr;
-            totalNetoAnual += neto;
-
-            tbody.innerHTML += `
-                <tr>
-                    <td>
-                        <select onchange="updateDividendo(${idx}, 'mes', this.value)">
-                            ${["Enero","Febrero","Marzo","Abril","Mayo","Junio","Julio","Agosto","Septiembre","Octubre","Noviembre","Diciembre"].map(m => `<option value="${m}" ${d.mes===m?'selected':''}>${m}</option>`).join('')}
-                        </select>
-                    </td>
-                    <td><input type="text" value="${d.activo}" oninput="updateDividendo(${idx}, 'activo', this.value)"></td>
-                    <td><input type="number" step="0.01" value="${d.bruto}" oninput="updateDividendo(${idx}, 'bruto', this.value)"></td>
-                    <td><input type="number" step="0.01" value="${d.isr}" oninput="updateDividendo(${idx}, 'isr', this.value)"></td>
-                    <td style="font-weight:600; color:var(--success);">$${neto.toFixed(2)}</td>
-                    <td><button class="btn-delete" onclick="deleteDividendo(${idx})"><i class="fa-solid fa-trash"></i></button></td>
-                </tr>`;
-        });
-        tbody.innerHTML += `<tr style="background:#f7fafc; font-weight:bold;"><td colspan="4">Total Neto Recibido</td><td colspan="2" style="color:var(--success); font-size:0.85rem;">$${totalNetoAnual.toFixed(2)}</td></tr>`;
-    }
-
-    function updateDividendo(idx, fld, val) {
-        dividendos[idx][fld] = val; saveAll();
-        if(fld === 'bruto' || fld === 'isr') renderDividendos();
-    }
-    function addDividendo() { dividendos.push({mes:"Enero", activo:"FMTY14", bruto:0, isr:0}); saveAll(); renderDividendos(); }
-    function deleteDividendo(idx) { dividendos.splice(idx,1); saveAll(); renderDividendos(); }
-
-    function renderAvisos() {
-        const tbody = document.getElementById('avisos-rows');
-        tbody.innerHTML = '';
-        avisos.forEach((a, idx) => {
-            tbody.innerHTML += `
-                <tr>
-                    <td><input type="text" value="${a.activo}" oninput="updateAvisoData(${idx}, 'activo', this.value)"></td>
-                    <td><input type="date" value="${a.exdiv}" oninput="updateAvisoData(${idx}, 'exdiv', this.value)"></td>
-                    <td><input type="date" value="${a.pago}" oninput="updateAvisoData(${idx}, 'pago', this.value)"></td>
-                    <td><input type="number" step="0.0001" value="${a.monto}" oninput="updateAvisoData(${idx}, 'monto', this.value)"></td>
-                    <td><button class="btn-delete" onclick="deleteAviso(${idx})"><i class="fa-solid fa-trash"></i></button></td>
-                </tr>`;
-        });
-    }
-    function updateAvisoData(idx, fld, val) { avisos[idx][fld] = val; saveAll(); }
-    function addAviso() { avisos.push({activo:"FMTY14", exdiv:"", pago:"", monto:0}); saveAll(); renderAvisos(); }
-    function deleteAviso(idx) { avisos.splice(idx,1); saveAll(); renderAvisos(); }
-
-    function renderWatchlist() {
-        const tbody = document.getElementById('watchlist-rows');
-        tbody.innerHTML = '';
-        watchlist.forEach((w, idx) => {
-            const act = parseFloat(w.actual) || 0;
-            const obj = parseFloat(w.objetivo) || 0;
-            let badge = act <= obj ? `<span class="badge" style="background:var(--success); color:white;">¡COMPRAR!</span>` : `<span class="badge" style="background:var(--warning); color:black;">Esperar</span>`;
+        // --- MOTOR API DE PRECIOS EN VIVO (YAHOO FINANCE VIA PROXY) ---
+        async function fetchPrecioYahooOnline(ticker) {
+            let tickerLimpio = ticker.trim().toUpperCase();
+            // Autofijar sufijo mexicano si no posee extensión de mercado
+            if (!tickerLimpio.includes('.')) {
+                tickerLimpio += '.MX';
+            }
             
-            tbody.innerHTML += `
+            const urlOriginal = `https://query1.financeapi.com/v8/finance/chart/${tickerLimpio}`;
+            const urlProxy = `https://api.allorigins.win/get?url=${encodeURIComponent(urlOriginal)}`;
+
+            try {
+                const res = await fetch(urlProxy);
+                if (!res.ok) return null;
+                const jsonWrapper = await res.json();
+                const data = JSON.parse(jsonWrapper.contents);
+                const precio = data.chart.result[0].indicators.quote[0].close.pop() || data.chart.result[0].meta.regularMarketPrice;
+                return precio ? parseFloat(precio.toFixed(2)) : null;
+            } catch (e) {
+                console.error("Fallo obteniendo cotización para: " + tickerLimpio, e);
+                return null;
+            }
+        }
+
+        async function actualizarPreciosTodo() {
+            for (let activo of datosApp.gbm) {
+                const p = await fetchPrecioYahooOnline(activo.ticker);
+                if (p) { activo.precioMkt = p; }
+            }
+            guardarDatos();
+            alert("Precios de GBM sincronizados con Yahoo Finance.");
+        }
+
+        async function actualizarPreciosRadar() {
+            for (let item of datosApp.radar) {
+                const p = await fetchPrecioYahooOnline(item.ticker);
+                if (p) { item.precioActual = p; }
+            }
+            guardarDatos();
+            alert("Precios del Radar actualizados.");
+        }
+
+        // --- CÁLCULOS INTEGRADOS Y CONSTRUCCIÓN DE DOM ---
+        function calcularYRenderizarTodo() {
+            // 1. Pilar GBM
+            let totalMktGBM = 0;
+            datosApp.gbm.forEach(a => {
+                totalMktGBM += (a.titulos * a.precioMkt);
+            });
+            const pilarGBMCompleto = totalMktGBM + (parseFloat(datosApp.efectivoGBM) || 0);
+            document.getElementById('total-pilar-gbm').innerText = `Total Pilar GBM: $${pilarGBMCompleto.toLocaleString('es-MX', {minimumFractionDigits:2})}`;
+
+            // 2. Pilar Sofipos
+            let totalSofipos = 0;
+            datosApp.sofipos.forEach(s => totalSofipos += (parseFloat(s.monto) || 0));
+
+            // Calculo Global de los Pilares
+            const granTotalPatrimonio = pilarGBMCompleto + totalSofipos + datosApp.yoPresto + datosApp.bitso;
+
+            // Renderizar Tabla General
+            const tablaPilares = document.getElementById('tabla-pilares');
+            tablaPilares.innerHTML = `
                 <tr>
-                    <td><input type="text" value="${w.activo}" oninput="updateWatchlist(${idx}, 'activo', this.value)"></td>
-                    <td><input type="number" step="0.01" value="${w.actual}" oninput="updateWatchlist(${idx}, 'actual', this.value)"></td>
-                    <td><input type="number" step="0.01" value="${w.objective}" oninput="updateWatchlist(${idx}, 'objetivo', this.value)"></td>
-                    <td>${badge}</td>
-                    <td><button class="btn-delete" onclick="deleteWatchlist(${idx})"><i class="fa-solid fa-trash"></i></button></td>
-                </tr>`;
-        });
-    }
-    function updateWatchlist(idx, fld, val) { watchlist[idx][fld] = val; saveAll(); if(fld!=='activo') renderWatchlist(); }
-    function addWatchlistItem() { watchlist.push({activo:"Acción", actual:0, objetivo:0}); saveAll(); renderWatchlist(); }
-    function deleteWatchlist(idx) { watchlist.splice(idx,1); saveAll(); renderWatchlist(); }
+                    <td class="py-2.5 font-semibold text-gray-700">GBM (Renta Variable)</td>
+                    <td class="py-2.5 text-right font-bold">$${pilarGBMCompleto.toLocaleString('es-MX',{minimumFractionDigits:2})}</td>
+                    <td class="py-2.5 text-right text-xs font-bold text-blue-600">${granTotalPatrimonio > 0 ? ((pilarGBMCompleto/granTotalPatrimonio)*100).toFixed(1) : 0}%</td>
+                </tr>
+                <tr>
+                    <td class="py-2.5 font-semibold text-gray-700">Sofipos (Renta Fija)</td>
+                    <td class="py-2.5 text-right font-bold">$${totalSofipos.toLocaleString('es-MX',{minimumFractionDigits:2})}</td>
+                    <td class="py-2.5 text-right text-xs font-bold text-emerald-600">${granTotalPatrimonio > 0 ? ((totalSofipos/granTotalPatrimonio)*100).toFixed(1) : 0}%</td>
+                </tr>
+                <tr>
+                    <td class="py-2.5 font-semibold text-gray-700">Yo Te Presto</td>
+                    <td class="py-2.5 text-right"><input type="number" step="0.01" value="${datosApp.yoPresto}" onchange="modificarYoPresto(this.value)" class="w-24 text-right p-0.5 border border-gray-100 rounded text-sm font-bold bg-amber-50 text-amber-800"></td>
+                    <td class="py-2.5 text-right text-xs font-bold text-amber-600">${granTotalPatrimonio > 0 ? ((datosApp.yoPresto/granTotalPatrimonio)*100).toFixed(1) : 0}%</td>
+                </tr>
+                <tr>
+                    <td class="py-2.5 font-semibold text-gray-700">Bitso (Cripto)</td>
+                    <td class="py-2.5 text-right"><input type="number" step="0.01" value="${datosApp.bitso}" onchange="modificarBitso(this.value)" class="w-24 text-right p-0.5 border border-gray-100 rounded text-sm font-bold bg-purple-50 text-purple-800"></td>
+                    <td class="py-2.5 text-right text-xs font-bold text-purple-600">${granTotalPatrimonio > 0 ? ((datosApp.bitso/granTotalPatrimonio)*100).toFixed(1) : 0}%</td>
+                </tr>
+                <tr class="border-t-2 border-gray-900 bg-slate-50 font-black">
+                    <td class="py-3 text-slate-900 font-bold">TOTAL INTEGRADO</td>
+                    <td class="py-3 text-right text-slate-900">$${granTotalPatrimonio.toLocaleString('es-MX',{minimumFractionDigits:2})}</td>
+                    <td class="py-3 text-right text-xs text-slate-900">100%</td>
+                </tr>
+            `;
 
-    function renderChart(todosLosPilares) {
-        const ctx = document.getElementById('allocationChart').getContext('2d');
-        if (allocationChart) allocationChart.destroy();
-        allocationChart = new Chart(ctx, {
-            type: 'doughnut',
-            data: { 
-                labels: Object.keys(todosLosPilares), 
-                datasets: [{ data: Object.values(todosLosPilares).map(p=>p.saldo), backgroundColor: Object.values(todosLosPilares).map(p=>p.color) }] 
-            },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'bottom', labels: { boxWidth: 8, font: { size: 9 } } } } }
-        });
-    }
+            // Renderizar Bloque Sofipos
+            const listaSofipos = document.getElementById('lista-sofipos');
+            listaSofipos.innerHTML = '';
+            datosApp.sofipos.forEach((sof, idx) => {
+                listaSofipos.innerHTML += `
+                    <div class="flex items-center gap-2 bg-gray-50 p-2.5 rounded-xl border border-gray-100">
+                        <input type="text" value="${sof.cuenta}" onchange="updateSofipo(${idx}, 'cuenta', this.value)" class="flex-1 bg-transparent font-bold text-sm text-gray-700 outline-none">
+                        <input type="number" step="0.01" value="${sof.monto}" onchange="updateSofipo(${idx}, 'monto', this.value)" class="w-24 text-right font-bold text-sm bg-white p-1 rounded border border-gray-200">
+                        <div class="flex items-center text-xs text-gray-400 font-bold w-14">
+                            <input type="number" step="0.01" value="${sof.tasa}" onchange="updateSofipo(${idx}, 'tasa', this.value)" class="w-8 text-right text-gray-600 bg-transparent">%
+                        </div>
+                        <button onclick="eliminarSofipo(${idx})" class="text-red-400 hover:text-red-600 px-1"><i class="fa-solid fa-trash-can"></i></button>
+                    </div>
+                `;
+            });
 
-    setMotivationQuote();
-    updateDashboard();
-</script>
-</body>
-</html>
+            // Renderizar Tabla GBM
+            const tbodyGBM = document.getElementById('tabla-gbm');
+            tbodyGBM.innerHTML = '';
+            datosApp.gbm.forEach((act, idx) => {
+                const totalCompra = act.titulos * act.precioProm;
+                const totalActualMkt = act.titulos * act.precioMkt;
+                const diferencia = totalActualMkt - totalCompra;
+                const porcDif = totalCompra > 0 ? (diferencia / totalCompra) * 100 : 0;
+
+                const colorClase = diferencia >= 0 ? 'text-emerald-600' : 'text-red-600';
+                const signo = diferencia >= 0 ? '+' : '';
+
+                tbodyGBM.innerHTML += `
+                    <tr class="align-middle">
+                        <td class="py-2.5 font-bold text-gray-900"><input type="text" value="${act.ticker}" onchange="updateActivoGBM(${idx}, 'ticker', this.value)" class="w-16 bg-transparent text-xs uppercase font-bold focus:bg-white focus:p-0.5 rounded"></td>
+                        <td class="py-2.5 text-center"><input type="number" value="${act.titulos}" onchange="updateActivoGBM(${idx}, 'titulos', this.value)" class="w-10 text-center bg-transparent border-b border-gray-200 p-0.5 text-xs font-bold"></td>
+                        <td class="py-2.5 text-right"><input type="number" step="0.01" value="${act.precioProm}" onchange="updateActivoGBM(${idx}, 'precioProm', this.value)" class="w-16 text-right bg-transparent text-xs p-0.5"></td>
+                        <td class="py-2.5 text-right font-bold text-slate-700">$${totalActualMkt.toFixed(1)}</td>
+                        <td class="py-2.5 text-right text-xs font-bold ${colorClase}">${signo}$${diferencia.toFixed(1)}<br><span class="text-[10px] opacity-80">${signo}${porcDif.toFixed(1)}%</span></td>
+                        <td class="py-2.5 text-center"><button onclick="eliminarActivoGBM(${idx})" class="text-gray-300 hover:text-red-500"><i class="fa-solid fa-square-minus"></i></button></td>
+                    </tr>
+                `;
+            });
+
+            // Renderizar Lista de Dividendos Avisos
+            const divAvisos = document.getElementById('lista-avisos-divs');
+            divAvisos.innerHTML = '';
+            datosApp.avisosDividendo.forEach((av, idx) => {
+                divAvisos.innerHTML += `
+                    <div class="grid grid-cols-4 gap-1.5 text-xs bg-purple-50/50 p-2.5 rounded-xl border border-purple-100 font-medium items-center">
+                        <div>
+                            <span class="block text-[10px] text-gray-400 font-bold uppercase">Activo</span>
+                            <input type="text" value="${av.ticker}" onchange="updateAvisoDiv(${idx}, 'ticker', this.value)" class="w-full bg-transparent font-bold text-purple-900 uppercase">
+                        </div>
+                        <div>
+                            <span class="block text-[10px] text-gray-400 font-bold uppercase">Ex-Div</span>
+                            <input type="text" value="${av.exDiv}" onchange="updateAvisoDiv(${idx}, 'exDiv', this.value)" class="w-full bg-transparent text-gray-600">
+                        </div>
+                        <div>
+                            <span class="block text-[10px] text-gray-400 font-bold uppercase">Pago</span>
+                            <input type="text" value="${av.pago}" onchange="updateAvisoDiv(${idx}, 'pago', this.value)" class="w-full bg-transparent text-gray-600">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <span class="block text-[10px] text-gray-400 font-bold uppercase">Mto/Tit</span>
+                                <input type="number" step="0.001" value="${av.montoPorTit}" onchange="updateAvisoDiv(${idx}, 'montoPorTit', this.value)" class="w-12 bg-transparent font-bold text-gray-800">
+                            </div>
+                            <button onclick="eliminarAvisoDiv(${idx})" class="text-purple-300 hover:text-red-500"><i class="fa-solid fa-trash-can text-xs"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            // Renderizar Tabla de Dividendos Cobrados
+            // FIJADO: Se utiliza el trigger 'onchange' en vez de 'oninput' para evitar perder el focus y esconder el teclado en celulares
+            const tbodyCobros = document.getElementById('tabla-cobros-divs');
+            tbodyCobros.innerHTML = '';
+            let sumaNetoDivs = 0;
+            datosApp.cobrosDividendo.forEach((cob, idx) => {
+                const neto = (parseFloat(cob.bruto) || 0) - (parseFloat(cob.isr) || 0);
+                sumaNetoDivs += neto;
+                tbodyCobros.innerHTML += `
+                    <tr class="font-medium">
+                        <td class="py-2"><input type="text" value="${cob.mes}" onchange="updateCobroDiv(${idx}, 'mes', this.value)" class="w-14 bg-transparent text-xs"></td>
+                        <td class="py-2"><input type="text" value="${cob.ticker}" onchange="updateCobroDiv(${idx}, 'ticker', this.value)" class="w-12 bg-transparent text-xs uppercase font-bold"></td>
+                        <td class="py-2 text-right"><input type="number" step="0.01" value="${cob.bruto}" onchange="updateCobroDiv(${idx}, 'bruto', this.value)" class="w-14 text-right bg-transparent text-xs border-b border-gray-100 font-bold text-gray-700"></td>
+                        <td class="py-2 text-right"><input type="number" step="0.01" value="${cob.isr}" onchange="updateCobroDiv(${idx}, 'isr', this.value)" class="w-12 text-right bg-transparent text-xs border-b border-gray-100 font-bold text-red-500"></td>
+                        <td class="py-2 text-right font-bold text-xs ${neto >= 0 ? 'text-emerald-600' : 'text-red-500'}">$${neto.toFixed(2)}</td>
+                        <td class="py-2 text-center"><button onclick="eliminarCobroDiv(${idx})" class="text-gray-300 hover:text-red-500"><i class="fa-solid fa-circle-minus"></i></button></td>
+                    </tr>
+                `;
+            });
+            document.getElementById('total-neto-dividendos').innerText = `$${sumaNetoDivs.toLocaleString('es-MX', {minimumFractionDigits: 2})}`;
+
+            // Renderizar Tabla Radar
+            const tbodyRadar = document.getElementById('tabla-radar');
+            tbodyRadar.innerHTML = '';
+            datosApp.radar.forEach((rad, idx) => {
+                let badgeEstado = '<span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded text-[10px] font-bold">Esperar</span>';
+                if (rad.precioActual > 0 && rad.precioActual <= rad.precioObjetivo) {
+                    badgeEstado = '<span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded text-[10px] font-black animate-pulse">¡COMPRAR!</span>';
+                }
+                tbodyRadar.innerHTML += `
+                    <tr class="font-medium items-center">
+                        <td class="py-2.5 font-bold"><input type="text" value="${rad.ticker}" onchange="updateRadar(${idx}, 'ticker', this.value)" class="w-16 bg-transparent text-xs uppercase font-bold"></td>
+                        <td class="py-2.5 text-right font-bold text-blue-600">$${rad.precioActual || '0.00'}</td>
+                        <td class="py-2.5 text-right"><input type="number" step="0.01" value="${rad.precioObjetivo}" onchange="updateRadar(${idx}, 'precioObjetivo', this.value)" class="w-16 text-right bg-transparent text-xs font-bold border-b border-gray-100"></td>
+                        <td class="py-2.5 text-center">${badgeEstado}</td>
+                        <td class="py-2.5 text-center"><button onclick="eliminarRadar(${idx})" class="text-gray-300 hover:text-red-500"><i class="fa-solid fa-trash-can text-xs"></i></button></td>
+                    </tr>
+                `;
+            });
+        }
+
+        // --- MANEJADORES DE EVENTOS EDITABLES ---
+        function modificar
