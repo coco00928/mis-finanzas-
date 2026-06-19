@@ -31,7 +31,6 @@
         header h1 { color: var(--accent-hover); font-size: 1.4rem; margin-bottom: 2px; }
         header p { color: var(--text-muted); font-size: 0.8rem; }
 
-        /* Banner de Frase Motivacional */
         .motivation-banner {
             background: var(--quote-bg);
             border-left: 4px solid var(--quote-border);
@@ -76,7 +75,6 @@
         }
         input:focus, select:focus { background-color: #ffffff; border-color: var(--accent); outline: none; }
         
-        /* Ajustes de columnas óptimos para 3+ dígitos */
         .col-ticker { width: 18%; }
         .col-tits { width: 18%; }
         .col-price { width: 19%; }
@@ -157,7 +155,7 @@
     <div id="gbm" class="tab-content">
         <div class="card">
             <h2>Renta Variable (Precios Automatizados vía API)</h2>
-            <button class="btn-update" onclick="fetchAllMarketPrices()"><i class="fa-solid fa-rotate"></i> Actualizar Precios Online</button>
+            <button class="btn-update" id="btn-sync-prices" onclick="fetchAllMarketPrices()"><i class="fa-solid fa-rotate"></i> Actualizar Precios Online</button>
             <div class="table-responsive">
                 <table>
                     <thead>
@@ -243,7 +241,6 @@
 </div>
 
 <script>
-    // --- FRASES MOTIVACIONALES POR SEMANA ---
     const frasesSemanales = [
         "El éxito financiero no se trata de adivinar el futuro, sino de la disciplina constante con la que construyes tu presente.",
         "Cada peso invertido en tus pilares es un bloque de piedra en la fortaleza de tu libertad y el bienestar de tu familia.",
@@ -260,7 +257,6 @@
         document.getElementById('motivation-text').innerText = frasesSemanales[index];
     }
 
-    // --- DATOS INICIALES REALES ---
     const defaultSofipos = [
         { nombre: "Nu México", monto: 25153.91, tasa: 14.25 },
         { nombre: "DiDi Cuenta", monto: 5472.37, tasa: 14.00 },
@@ -274,14 +270,14 @@
     };
 
     const defaultStocks = [
-        { ticker: "FMTY14.MX", titulos: 36, precioPromedio: 14.06, precioMercado: 14.06 },
+        { ticker: "FMTY14.MX", titulos: 36, precioPromedio: 14.36, precioMercado: 14.06 },
         { ticker: "WALMEX.MX", titulos: 157, precioPromedio: 54.54, precioMercado: 50.29 },
         { ticker: "FEMSAUBD.MX", titulos: 28, precioPromedio: 172.73, precioMercado: 219.31 },
         { ticker: "ALSEA.MX", titulos: 60, precioPromedio: 48.12, precioMercado: 46.78 }
     ];
 
     const defaultDividendos = [
-        { mes: "Enero", activo: "FMTY14", bruto: 100.00, isr: 30.00 }
+        { mes: "Febrero", activo: "FMTY14", bruto: 100.00, isr: 30.00 }
     ];
 
     const defaultAvisos = [
@@ -329,38 +325,50 @@
         return totalTitulosMkt + gbmCash;
     }
 
-    // --- CONEXIÓN DE PRECIOS AUTOMATIZADOS ONLINE ---
+    // --- NUEVA CONEXIÓN REPARADA CON PROXY ANTI-CORS ---
     async function fetchAllMarketPrices() {
+        const btn = document.getElementById('btn-sync-prices');
+        if(btn) btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Sincronizando...`;
+
         for (let i = 0; i < gbmStocks.length; i++) {
             const tk = gbmStocks[i].ticker.trim().toUpperCase();
-            if(!tk || tk === "NUEVO") continue;
+            if(!tk || tk === "NUEVO.MX") continue;
             
             try {
-                // Formateamos para Stooq (ej: FMTY14.MX -> FMTY14.MX)
-                const response = await fetch(`https://stooq.com/q/l/?s=${tk}&f=sd2t2c1&e=json`);
-                const data = await response.json();
-                if (data && data.matrix && data.matrix[1] && data.matrix[1][3]) {
-                    const onlinePrice = parseFloat(data.matrix[1][3]);
-                    if (!isNaN(onlinePrice) && onlinePrice > 0) {
-                        gbmStocks[i].precioMercado = onlinePrice;
-                        // Actualizar visualmente la fila si estás parado en la pestaña
-                        const inputMkt = document.getElementById(`price-mkt-input-${i}`);
-                        if (inputMkt) {
-                            inputMkt.value = onlinePrice;
-                            inputMkt.classList.add('sync-flash');
-                            setTimeout(() => inputMkt.classList.remove('sync-flash'), 800);
+                // Usamos el proxy público allorigins para saltar el bloqueo de CORS de Yahoo/Stooq
+                const urlTarget = encodeURIComponent(`https://query1.finance.yahoo.com/v8/finance/chart/${tk}`);
+                const response = await fetch(`https://api.allorigins.win/get?url=${urlTarget}`);
+                
+                if (response.ok) {
+                    const wrapper = await response.json();
+                    const data = JSON.parse(wrapper.contents);
+                    
+                    if (data && data.chart && data.chart.result && data.chart.result[0]) {
+                        const meta = data.chart.result[0].meta;
+                        const onlinePrice = meta.regularMarketPrice;
+                        
+                        if (onlinePrice && !isNaN(onlinePrice) && onlinePrice > 0) {
+                            gbmStocks[i].precioMercado = parseFloat(onlinePrice.toFixed(2));
+                            
+                            // Forzar actualización inmediata en el recuadro visual de la fila
+                            const inputMkt = document.getElementById(`price-mkt-input-${i}`);
+                            if (inputMkt) {
+                                inputMkt.value = onlinePrice.toFixed(2);
+                                inputMkt.classList.add('sync-flash');
+                                setTimeout(() => inputMkt.classList.remove('sync-flash'), 800);
+                            }
+                            liveUpdateStock(i, 'precioMercado', onlinePrice);
                         }
-                        liveUpdateStock(i, 'precioMercado', onlinePrice);
                     }
                 }
             } catch (e) {
-                console.log("Error trayendo precio en vivo para: " + tk, e);
+                console.log("Error de conexión para: " + tk, e);
             }
         }
         saveAll();
+        if(btn) btn.innerHTML = `<i class="fa-solid fa-rotate"></i> Actualizar Precios Online`;
     }
 
-    // --- DASHBOARD GENERAL ---
     function updateDashboard() {
         let totalSofipos = sofipos.reduce((acc, c) => acc + (parseFloat(c.monto) || 0), 0);
         let totalGBMConsolidado = getGbmTotalPatrimonial();
@@ -425,7 +433,6 @@
     function addSofipo() { sofipos.push({nombre:"Nueva", monto:0, tasa:14}); saveAll(); updateDashboard(); }
     function deleteSofipo(idx) { sofipos.splice(idx,1); saveAll(); updateDashboard(); }
 
-    // --- PESTAÑA GBM OPTIMIZADA CON TECLADO SEGURO ---
     function renderGBM() {
         const tbody = document.getElementById('gbm-rows');
         tbody.innerHTML = '';
@@ -508,7 +515,6 @@
     function addStock() { gbmStocks.push({ticker:"NUEVO.MX", titulos:0, precioPromedio:0, precioMercado:0}); saveAll(); renderGBM(); }
     function deleteStock(idx) { gbmStocks.splice(idx,1); saveAll(); renderGBM(); }
 
-    // --- PESTAÑA DIVIDENDOS ---
     function renderDividendos() {
         const tbody = document.getElementById('dividend-rows');
         tbody.innerHTML = '';
@@ -544,7 +550,6 @@
     function addDividendo() { dividendos.push({mes:"Enero", activo:"FMTY14", bruto:0, isr:0}); saveAll(); renderDividendos(); }
     function deleteDividendo(idx) { dividendos.splice(idx,1); saveAll(); renderDividendos(); }
 
-    // --- AVISOS ---
     function renderAvisos() {
         const tbody = document.getElementById('avisos-rows');
         tbody.innerHTML = '';
@@ -563,7 +568,6 @@
     function addAviso() { avisos.push({activo:"FMTY14", exdiv:"", pago:"", monto:0}); saveAll(); renderAvisos(); }
     function deleteAviso(idx) { avisos.splice(idx,1); saveAll(); renderAvisos(); }
 
-    // --- RADAR ---
     function renderWatchlist() {
         const tbody = document.getElementById('watchlist-rows');
         tbody.innerHTML = '';
@@ -586,7 +590,6 @@
     function addWatchlistItem() { watchlist.push({activo:"Acción", actual:0, objetivo:0}); saveAll(); renderWatchlist(); }
     function deleteWatchlist(idx) { watchlist.splice(idx,1); saveAll(); renderWatchlist(); }
 
-    // GRÁFICA
     function renderChart(todosLosPilares) {
         const ctx = document.getElementById('allocationChart').getContext('2d');
         if (allocationChart) allocationChart.destroy();
@@ -600,7 +603,6 @@
         });
     }
 
-    // Inicializar app
     setMotivationQuote();
     updateDashboard();
 </script>
