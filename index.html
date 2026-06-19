@@ -44,23 +44,28 @@
         .card h2 { font-size: 0.95rem; color: var(--accent-hover); margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid var(--border-color); display: flex; align-items: center; gap: 6px; }
 
         .table-responsive { overflow-x: auto; width: 100%; width: -webkit-fill-available; margin-bottom: 5px; }
-        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.78rem; }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.75rem; }
         th, td { padding: 6px 4px; border-bottom: 1px solid var(--border-color); vertical-align: middle; }
-        th { background-color: #f7fafc; color: var(--text-main); font-weight: 600; }
+        th { background-color: #f7fafc; color: var(--text-main); font-weight: 600; white-space: nowrap; }
         
         input, select { 
             width: 100%; padding: 5px; border: 1px solid var(--border-color); border-radius: 6px; 
-            color: var(--text-main); font-size: 0.78rem; background-color: #f8fafc; -webkit-appearance: none;
+            color: var(--text-main); font-size: 0.75rem; background-color: #f8fafc; -webkit-appearance: none;
         }
         input:focus, select:focus { background-color: #ffffff; border-color: var(--accent); outline: none; }
         
-        .badge { padding: 2px 4px; border-radius: 4px; font-weight: bold; font-size: 0.7rem; }
+        .badge { padding: 2px 4px; border-radius: 4px; font-weight: bold; font-size: 0.68rem; display: inline-block; }
         .chart-container { position: relative; margin: auto; height: 180px; width: 100%; }
         .btn-add { background: var(--success); color: white; border: none; padding: 6px 10px; border-radius: 6px; cursor: pointer; font-weight: bold; font-size: 0.75rem; width: 100%; display: flex; align-items: center; justify-content: center; gap: 4px; margin-top: 5px; }
         .btn-delete { background: var(--danger); color: white; border: none; padding: 5px; border-radius: 6px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
         
         .grid-2 { display: grid; grid-template-columns: 1fr; gap: 12px; }
+        .input-inline { display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 0.8rem; }
+        .input-inline input { max-width: 150px; }
         @media (min-width: 768px) { .grid-2 { grid-template-columns: 1fr 1fr; } .chart-container { height: 220px; } }
+        
+        .up-val { color: #2f855a; font-weight: bold; }
+        .down-val { color: #c53030; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -109,18 +114,20 @@
         </div>
     </div>
 
-    <!-- PESTAÑA: GBM TOTALMENTE EDITABLE -->
+    <!-- PESTAÑA: GBM CON PLUSVALÍA Y EFECTIVO -->
     <div id="gbm" class="tab-content">
         <div class="card">
-            <h2>Renta Variable (Precios de Mercado Modificables)</h2>
+            <h2>Renta Variable (Cálculo de Plusvalía/Minusvalía)</h2>
             <div class="table-responsive">
                 <table>
                     <thead>
                         <tr>
                             <th>Ticker</th>
-                            <th>Títulos</th>
+                            <th>Títs</th>
+                            <th>Precio Prom ($)</th>
                             <th>Precio Mkt ($)</th>
                             <th>Total Mkt</th>
+                            <th>Gan/Per</th>
                             <th style="width:30px;"></th>
                         </tr>
                     </thead>
@@ -128,6 +135,17 @@
                 </table>
             </div>
             <button class="btn-add" onclick="addStock()"><i class="fa-solid fa-plus"></i> Agregar Activo a GBM</button>
+        </div>
+
+        <!-- SECCIÓN NUEVA: EFECTIVO DISPONIBLE EN GBM -->
+        <div class="card">
+            <h2><i class="fa-solid fa-money-bill-wave" style="color:var(--success);"></i> Efectivo en GBM</h2>
+            <p style="font-size:0.75rem; color:var(--text-muted); margin-bottom: 6px;">Registra el dinero libre en Smart Cash o disponible para compra en tu estrategia:</p>
+            <div class="input-inline">
+                <label style="font-weight:600;">Efectivo Disponible:</label>
+                <input type="number" id="gbm-cash-input" step="0.01" placeholder="0.00" oninput="updateGbmCash(this.value)">
+                <span style="font-weight:bold; color:var(--accent);" id="gbm-total-consolidado-label"></span>
+            </div>
         </div>
     </div>
 
@@ -165,7 +183,7 @@
         </div>
     </div>
 
-    <!-- PESTAÑA: LISTA DE SEGUIMIENTO (RADAR DE PRECIOS) -->
+    <!-- PESTAÑA: LISTA DE SEGUIMIENTO (RADAR) -->
     <div id="seguimiento" class="tab-content">
         <div class="card">
             <h2><i class="fa-solid fa-binoculars"></i> Lista de Seguimiento (Oportunidades de Compra)</h2>
@@ -198,12 +216,13 @@
 
     const defaultPilaresEstaticos = {
         "GBM (Acciones y Fibras)": { saldo: 434.00, color: "#2b6cb0" },
-        "Yo te presto (P2P)": { saldo: 15485.46, color: "#ed8936" }, // Nombre corregido con éxito
+        "Yo te presto (P2P)": { saldo: 15485.46, color: "#ed8936" },
         "Bitso (Cripto)": { saldo: 2800.96, color: "#ecc94b" }
     };
 
+    // Añadida la propiedad precioPromedio inicializada por defecto igual al de mercado
     const defaultStocks = [
-        { ticker: "FMTY14.MX", titulos: 36, precioMercado: 14.06 } // Precio corregido a $14.06 basándonos en image_19.png
+        { ticker: "FMTY14.MX", titulos: 36, precioPromedio: 14.06, precioMercado: 14.06 }
     ];
 
     const defaultDividendos = [
@@ -219,21 +238,23 @@
     ];
 
     // Cargar o Inicializar Memoria
-    let sofipos = JSON.parse(localStorage.getItem('v6_sofipos')) || defaultSofipos;
-    let pilaresEstaticos = JSON.parse(localStorage.getItem('v6_pilares')) || defaultPilaresEstaticos;
-    let gbmStocks = JSON.parse(localStorage.getItem('v6_stocks')) || defaultStocks;
-    let dividendos = JSON.parse(localStorage.getItem('v6_dividendos')) || defaultDividendos;
-    let avisos = JSON.parse(localStorage.getItem('v6_avisos')) || defaultAvisos;
-    let watchlist = JSON.parse(localStorage.getItem('v6_watchlist')) || defaultWatchlist;
+    let sofipos = JSON.parse(localStorage.getItem('v7_sofipos')) || defaultSofipos;
+    let pilaresEstaticos = JSON.parse(localStorage.getItem('v7_pilares')) || defaultPilaresEstaticos;
+    let gbmStocks = JSON.parse(localStorage.getItem('v7_stocks')) || defaultStocks;
+    let gbmCash = parseFloat(localStorage.getItem('v7_gbmcash')) || 0; // Efectivo nuevo
+    let dividendos = JSON.parse(localStorage.getItem('v7_dividendos')) || defaultDividendos;
+    let avisos = JSON.parse(localStorage.getItem('v7_avisos')) || defaultAvisos;
+    let watchlist = JSON.parse(localStorage.getItem('v7_watchlist')) || defaultWatchlist;
     let allocationChart;
 
     function saveAll() {
-        localStorage.setItem('v6_sofipos', JSON.stringify(sofipos));
-        localStorage.setItem('v6_pilares', JSON.stringify(pilaresEstaticos));
-        localStorage.setItem('v6_stocks', JSON.stringify(gbmStocks));
-        localStorage.setItem('v6_dividendos', JSON.stringify(dividendos));
-        localStorage.setItem('v6_avisos', JSON.stringify(avisos));
-        localStorage.setItem('v6_watchlist', JSON.stringify(watchlist));
+        localStorage.setItem('v7_sofipos', JSON.stringify(sofipos));
+        localStorage.setItem('v7_pilares', JSON.stringify(pilaresEstaticos));
+        localStorage.setItem('v7_stocks', JSON.stringify(gbmStocks));
+        localStorage.setItem('v7_gbmcash', gbmCash);
+        localStorage.setItem('v7_dividendos', JSON.stringify(dividendos));
+        localStorage.setItem('v7_avisos', JSON.stringify(avisos));
+        localStorage.setItem('v7_watchlist', JSON.stringify(watchlist));
     }
 
     function switchTab(tabId) {
@@ -249,15 +270,21 @@
         if(tabId === 'seguimiento') renderWatchlist();
     }
 
+    // --- CALCULAR VALOR TOTAL DE GBM (ACCIONES + EFECTIVO) ---
+    function getGbmTotalPatrimonial() {
+        let totalTitulosMkt = gbmStocks.reduce((acc, c) => acc + ((parseFloat(c.titulos) || 0) * (parseFloat(c.precioMercado) || 0)), 0);
+        return totalTitulosMkt + gbmCash;
+    }
+
     // --- TABLA PRINCIPAL Y PILARES ---
     function updateDashboard() {
         let totalSofipos = sofipos.reduce((acc, c) => acc + (parseFloat(c.monto) || 0), 0);
-        let totalGBM = gbmStocks.reduce((acc, c) => acc + ((parseFloat(c.titulos) || 0) * (parseFloat(c.precioMercado) || 0)), 0);
+        let totalGBMConsolidado = getGbmTotalPatrimonial();
         
-        pilaresEstaticos["GBM (Acciones y Fibras)"].saldo = totalGBM;
+        pilaresEstaticos["GBM (Acciones y Fibras)"].saldo = totalGBMConsolidado;
 
         let todosLosPilares = {
-            "GBM (Acciones y Fibras)": { saldo: totalGBM, color: "#2b6cb0" },
+            "GBM (Acciones y Fibras)": { saldo: totalGBMConsolidado, color: "#2b6cb0" },
             "Sofipos": { saldo: totalSofipos, color: "#48bb78" },
             "Yo te presto (P2P)": { saldo: parseFloat(pilaresEstaticos["Yo te presto (P2P)"].saldo) || 0, color: "#ed8936" },
             "Bitso (Cripto)": { saldo: parseFloat(pilaresEstaticos["Bitso (Cripto)"].saldo) || 0, color: "#ecc94b" }
@@ -287,11 +314,10 @@
     function updatePilarValue(pilar, val) {
         if(pilaresEstaticos[pilar]) pilaresEstaticos[pilar].saldo = parseFloat(val) || 0;
         saveAll();
-        // Recalcular gráfica sin interrumpir escritura pesadamente
         let totalSofipos = sofipos.reduce((acc, c) => acc + (parseFloat(c.monto) || 0), 0);
-        let totalGBM = gbmStocks.reduce((acc, c) => acc + ((parseFloat(c.titulos) || 0) * (parseFloat(c.precioMercado) || 0)), 0);
+        let totalGBMConsolidado = getGbmTotalPatrimonial();
         renderChart({
-            "GBM (Acciones y Fibras)": { saldo: totalGBM, color: "#2b6cb0" },
+            "GBM (Acciones y Fibras)": { saldo: totalGBMConsolidado, color: "#2b6cb0" },
             "Sofipos": { saldo: totalSofipos, color: "#48bb78" },
             "Yo te presto (P2P)": { saldo: parseFloat(pilaresEstaticos["Yo te presto (P2P)"].saldo) || 0, color: "#ed8936" },
             "Bitso (Cripto)": { saldo: parseFloat(pilaresEstaticos["Bitso (Cripto)"].saldo) || 0, color: "#ecc94b" }
@@ -304,7 +330,7 @@
         sofipos.forEach((s, idx) => {
             tbody.innerHTML += `
                 <tr>
-                    <td><input type="text" value="${s.nombre}" oninput="sofipos(${idx}, 'nombre', this.value)"></td>
+                    <td><input type="text" value="${s.nombre}" oninput="updateSofipo(${idx}, 'nombre', this.value)"></td>
                     <td><input type="number" step="0.01" value="${s.monto}" oninput="updateSofipo(${idx}, 'monto', this.value)"></td>
                     <td><input type="number" step="0.01" value="${s.tasa}" style="min-width:45px;" oninput="updateSofipo(${idx}, 'tasa', this.value)"></td>
                     <td><button class="btn-delete" onclick="deleteSofipo(${idx})"><i class="fa-solid fa-trash"></i></button></td>
@@ -316,37 +342,72 @@
     function addSofipo() { sofipos.push({nombre:"Nueva", monto:0, tasa:14}); saveAll(); updateDashboard(); }
     function deleteSofipo(idx) { sofipos.splice(idx,1); saveAll(); updateDashboard(); }
 
-    // --- PESTAÑA GBM: TOTALMENTE MANUAL Y EDITABLE ---
+    // --- PESTAÑA GBM: PLUSVALÍA Y ACTUALIZACIÓN EN TIEMPO REAL ---
     function renderGBM() {
         const tbody = document.getElementById('gbm-rows');
         tbody.innerHTML = '';
+        
+        let totalTitulosMkt = 0;
+
         gbmStocks.forEach((stk, idx) => {
             const t = parseFloat(stk.titulos) || 0;
-            const pm = parseFloat(stk.precioMercado) || 0;
-            const totMkt = t * pm;
+            const pp = parseFloat(stk.precioPromedio) || 0; // Costo de compra
+            const pm = parseFloat(stk.precioMercado) || 0;   // Valor de mercado actual
+            
+            const totalCosto = t * pp;
+            const totalMkt = t * pm;
+            totalTitulosMkt += totalMkt;
+
+            // Cálculo de Plusvalía / Minusvalía
+            const gananciaDinero = totalMkt - totalCosto;
+            const gananciaPct = totalCosto > 0 ? (gananciaDinero / totalCosto) * 100 : 0;
+
+            let performanceClass = gananciaDinero >= 0 ? "up-val" : "down-val";
+            let sign = gananciaDinero >= 0 ? "+" : "";
+
             tbody.innerHTML += `
                 <tr>
                     <td><input type="text" value="${stk.ticker}" oninput="updateStock(${idx}, 'ticker', this.value)"></td>
                     <td><input type="number" value="${t}" oninput="updateStock(${idx}, 'titulos', this.value)"></td>
+                    <td><input type="number" step="0.01" value="${pp}" placeholder="Tu Costo" oninput="updateStock(${idx}, 'precioPromedio', this.value)"></td>
                     <td><input type="number" step="0.01" value="${pm}" oninput="updateStock(${idx}, 'precioMercado', this.value)"></td>
-                    <td style="font-weight:700; padding-left:5px;">$${totMkt.toLocaleString('es-MX',{maximumFractionDigits:2})}</td>
+                    <td style="font-weight:700;">$${totalMkt.toFixed(2)}</td>
+                    <td class="${performanceClass}">${sign}$${gananciaDinero.toFixed(2)}<br><small>${sign}${gananciaPct.toFixed(1)}%</small></td>
                     <td><button class="btn-delete" onclick="deleteStock(${idx})"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>`;
         });
+
+        // Pintar el input de efectivo y las etiquetas inferiores
+        document.getElementById('gbm-cash-input').value = gbmCash;
+        updateGbmLabels(totalTitulosMkt);
     }
 
     function updateStock(idx, fld, val) {
-        gbmStocks[idx][fld] = val; saveAll();
-        if(fld !== 'ticker') {
-            const row = document.getElementById('gbm-rows').children[idx];
-            if(row) {
-                const t = parseFloat(gbmStocks[idx].titulos) || 0;
-                const pm = parseFloat(gbmStocks[idx].precioMercado) || 0;
-                row.children[3].innerText = `$${(t * pm).toLocaleString('es-MX',{maximumFractionDigits:2})}`;
-            }
+        gbmStocks[idx][fld] = val; 
+        saveAll();
+        // Renderizado completo por fila para actualizar la plusvalía visual dinámicamente
+        let totalTitulosMkt = gbmStocks.reduce((acc, c) => acc + ((parseFloat(c.titulos) || 0) * (parseFloat(c.precioMercado) || 0)), 0);
+        updateGbmLabels(totalTitulosMkt);
+        
+        // Refrescar los cálculos visuales sin perder foco si se edita numérico
+        if(fld === 'titulos' || fld === 'precioPromedio' || fld === 'precioMercado') {
+            renderGBM();
         }
     }
-    function addStock() { gbmStocks.push({ticker:"NUEVO", titulos:0, precioMercado:0}); saveAll(); renderGBM(); }
+
+    function updateGbmCash(val) {
+        gbmCash = parseFloat(val) || 0;
+        saveAll();
+        let totalTitulosMkt = gbmStocks.reduce((acc, c) => acc + ((parseFloat(c.titulos) || 0) * (parseFloat(c.precioMercado) || 0)), 0);
+        updateGbmLabels(totalTitulosMkt);
+    }
+
+    function updateGbmLabels(totalTitulosMkt) {
+        let consolidado = totalTitulosMkt + gbmCash;
+        document.getElementById('gbm-total-consolidado-label').innerText = `Total Pilar GBM: $${consolidado.toLocaleString('es-MX', {minimumFractionDigits:2})} MXN`;
+    }
+
+    function addStock() { gbmStocks.push({ticker:"NUEVO", titulos:0, precioPromedio:0, precioMercado:0}); saveAll(); renderGBM(); }
     function deleteStock(idx) { gbmStocks.splice(idx,1); saveAll(); renderGBM(); }
 
     // --- PESTAÑA DIVIDENDOS: DETALLE POR MESES E ISR ---
